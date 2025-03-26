@@ -32,7 +32,7 @@ fi
 		CITRON_TAG="$(git rev-parse --short HEAD)"
                 COMM_COUNT="$(git rev-list --count HEAD)"
                 COMM_HASH="$(git rev-parse --short=9 HEAD)"
-                BUILD_DATE=$(date +"%Y%m%d")
+                BUILD_DATE="$(date +"%Y%m%d")"
 		echo "Making nightly \"$CITRON_TAG\" build"
 		VERSION="$CITRON_TAG"
 	else
@@ -137,7 +137,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S24 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Citron-"$VERSION"-"${BUILD_DATE}"-"${COMM_COUNT}"-"${COMM_HASH}"-"$ARCH".AppImage
+	-i ./AppDir -o Citron-"$VERSION"-"$BUILD_DATE"-"$COMM_COUNT"-"$COMM_HASH"-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
