@@ -138,7 +138,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S24 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Citron-"$VERSION"-"$BUILD_DATE"-"$COMM_COUNT"-"$COMM_HASH"-"$ARCH".AppImage
+	-i ./AppDir -o Citron-"$VERSION"-"${BUILD_DATE}"-"${COMM_COUNT}"-"${COMM_HASH}"-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
