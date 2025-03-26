@@ -12,7 +12,7 @@ URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime
 if [ "$ARCH" = 'x86_64' ]; then
 	if [ "$1" = 'v3' ]; then
 		echo "Making optimized build of citron for Steamdeck"
-		ARCH="${ARCH}_v3"
+		ARCH="${ARCH}"
 		ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
 	fi
 fi
