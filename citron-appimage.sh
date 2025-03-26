@@ -31,11 +31,13 @@ fi
 	if [ "$DEVEL" = 'true' ]; then
 		CITRON_TAG="$(git rev-parse --short HEAD)"
                 COMM_COUNT="$(git rev-list --count HEAD)"
+		COMM_HASH="$(git rev-parse --short HEAD)"
                 BUILD_DATE="$(date +"%Y%m%d")"
 		echo "Making nightly \"$CITRON_TAG\" build"
-		VERSION="$CITRON_TAG"
+		VERSION="nightly"
 	else
 		CITRON_TAG=$(git describe --tags)
+                COMM_HASH="$(git rev-parse --short HEAD)"
 		echo "Making stable \"$CITRON_TAG\" build"
 		git checkout "$CITRON_TAG"
 		VERSION="$(echo "$CITRON_TAG" | awk -F'-' '{print $1}')"
@@ -136,7 +138,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S24 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Citron-"$BUILD_DATE"-"$COMM_COUNT"-"$VERSION"-"$ARCH".AppImage
+	-i ./AppDir -o Citron-"$VERSION"-"$BUILD_DATE"-"$COMM_COUNT"-"$COMM_HASH"-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
