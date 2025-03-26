@@ -30,6 +30,9 @@ fi
 	cd ./citron
 	if [ "$DEVEL" = 'true' ]; then
 		CITRON_TAG="$(git rev-parse --short HEAD)"
+                COMM_COUNT="$(git rev-list --count HEAD)"
+                COMM_HASH="$(git rev-parse --short=9 HEAD)"
+                BUILD_DATE=$(date +"%Y%m%d")
 		echo "Making nightly \"$CITRON_TAG\" build"
 		VERSION="$CITRON_TAG"
 	else
@@ -129,9 +132,6 @@ echo "Adding update information \"$UPINFO\" to runtime..."
 ./uruntime --appimage-addupdinfo "$UPINFO"
 
 echo "Generating AppImage..."
-COMM_COUNT="$(git rev-list --count HEAD)"
-COMM_HASH="$(git rev-parse --short=9 HEAD)"
-BUILD_DATE=$(date +"%Y%m%d")
 ./uruntime --appimage-mkdwarfs -f \
 	--set-owner 0 --set-group 0 \
 	--no-history --no-create-timestamp \
