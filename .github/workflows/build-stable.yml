@@ -4,8 +4,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  schedule:
-    - cron: "0 14 * * 0"
+  push:
+    branches: [ "steamdeck-optimized-master" ]
   workflow_dispatch: {}
 
 jobs:
@@ -79,16 +79,8 @@ jobs:
         run: |
           export VERSION="$(cat version)"
           echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
-          
-      - name: Del Previous Release
-        run: |
-          gh release delete "${APP_VERSION}" --repo "${GITHUB_REPOSITORY}" --cleanup-tag  -y
-          sleep 5
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        continue-on-error: true
 
-      - name: Continuous Releaser
+      - name: Nightly Releaser
         uses: softprops/action-gh-release@v2
         with:
           name: "Citron AppImage ${{ env.APP_VERSION }}"
