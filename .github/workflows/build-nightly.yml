@@ -44,17 +44,17 @@ jobs:
           name: citron-${{ matrix.optimized && 'optimized' || 'normal' }}-appimage-${{ matrix.arch }}
           path: "dist"
 
-      - name: Check version file
+      - name: Check hash file
         if: ${{ matrix.optimized == false }}
         run: |
-          cat ~/version
-          echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
+          cat ~/hash
+          echo "APP_VERSION=$(cat ~/hash)" >> "${GITHUB_ENV}"
 
-      - name: Upload version file
+      - name: Upload hash file
         uses: actions/upload-artifact@v4.6.1
         with:
-          name: version
-          path: ~/version
+          name: hash
+          path: ~/hash
           overwrite: true
 
   release:
@@ -69,10 +69,14 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: citron-optimized-appimage-x86_64
-
-      - name: Read version
+          
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          name: hash
+          
+      - name: Read hash
         run: |
-          export VERSION="$(cat version)"
+          export VERSION="$(cat hash)"
           echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
 
       - name: Nightly Releaser
