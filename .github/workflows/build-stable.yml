@@ -80,7 +80,7 @@ jobs:
           export VERSION="$(cat version)"
           echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
 
-      - name: Nightly Releaser
+      - name: Stable Releaser
         uses: softprops/action-gh-release@v2
         with:
           name: "Citron AppImage ${{ env.APP_VERSION }}"
