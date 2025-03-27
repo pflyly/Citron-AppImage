@@ -9,7 +9,6 @@ Due the complexity of PGO two phase building, it can't be built automatically th
 * [Latest Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/tag/nightly)
 * [Latest Stable Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
-
 ---------------------------------------------------------------
 
 AppImage made using [sharun](https://github.com/VHSgunzo/sharun), which makes it extremely easy to turn any binary into a portable package without using containers or similar tricks.
