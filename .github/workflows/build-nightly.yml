@@ -70,10 +70,6 @@ jobs:
         with:
           name: citron-optimized-appimage-x86_64
 
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: version
-
       - name: Read version
         run: |
           export VERSION="$(cat version)"
@@ -81,7 +77,7 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          name: "Continuous Build (Nightly Version: ${{ env.APP_VERSION }})"
+          name: "Nightly Version: ${{ env.APP_VERSION }}"
           tag_name: "nightly"
           prerelease: true
           draft: false
