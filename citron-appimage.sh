@@ -29,7 +29,6 @@ fi
 (
 	cd ./citron
 	if [ "$DEVEL" = 'true' ]; then
-		CITRON_TAG="$(git rev-parse --short HEAD)"
                 COMM_COUNT="$(git rev-list --count HEAD)"
 		COMM_HASH="$(git rev-parse --short HEAD)"
                 BUILD_DATE="$(date +"%Y%m%d")"
@@ -40,11 +39,11 @@ fi
                 DATE="${BUILD_DATE}"
 	else
 		CITRON_TAG=$(git describe --tags)
-                COMM_COUNT="$(git rev-list --count HEAD)"
-                COMM_HASH="$(git rev-parse --short HEAD)"
 		BUILD_DATE="$(date +"%Y%m%d")"
 		echo "Making stable \"$CITRON_TAG\" build"
 		git checkout "$CITRON_TAG"
+                COMM_COUNT="$(git rev-list --count HEAD)"
+                COMM_HASH="$(git rev-parse --short HEAD)"
 		VERSION="$(echo "$CITRON_TAG" | awk -F'-' '{print $1}')"
                 COUNT="${COMM_COUNT}"
                 HASH="${COMM_HASH}"
