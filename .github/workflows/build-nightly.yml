@@ -75,7 +75,8 @@ jobs:
           export VERSION="$(cat version)"
           echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
 
-      - uses: softprops/action-gh-release@v2
+      - name: Nightly Releaser
+        uses: softprops/action-gh-release@v2
         with:
           name: "Nightly Version: ${{ env.APP_VERSION }}"
           tag_name: "nightly"
