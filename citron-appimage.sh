@@ -35,9 +35,9 @@ fi
                 BUILD_DATE="$(date +"%Y%m%d")"
 		echo "Making nightly \"$CITRON_TAG\" build"
 		VERSION="nightly"
-                COUNT="${COMM_COUNT}"
-                HASH="${COMM_HASH}"
-                DATE="${BUILD_DATE}"
+                export COUNT="${COMM_COUNT}"
+                export HASH="${COMM_HASH}"
+                export DATE="${BUILD_DATE}"
 	else
 		CITRON_TAG=$(git describe --tags)
                 COMM_COUNT="$(git rev-list --count HEAD)"
@@ -46,9 +46,9 @@ fi
 		echo "Making stable \"$CITRON_TAG\" build"
 		git checkout "$CITRON_TAG"
 		VERSION="$(echo "$CITRON_TAG" | awk -F'-' '{print $1}')"
-                COUNT="${COMM_COUNT}"
-                HASH="${COMM_HASH}"
-                DATE="${BUILD_DATE}"
+                export COUNT="${COMM_COUNT}"
+                export HASH="${COMM_HASH}"
+                export DATE="${BUILD_DATE}"
 	fi
 	git submodule update --init --recursive -j$(nproc)
 
