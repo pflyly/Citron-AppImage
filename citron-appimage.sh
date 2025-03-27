@@ -33,11 +33,11 @@ fi
                 COMM_COUNT="$(git rev-list --count HEAD)"
 		COMM_HASH="$(git rev-parse --short HEAD)"
                 BUILD_DATE="$(date +"%Y%m%d")"
-		echo "Making nightly \"$CITRON_TAG\" build"
+		echo "Making nightly build"
 		VERSION="nightly"
-                export COUNT="${COMM_COUNT}"
-                export HASH="${COMM_HASH}"
-                export DATE="${BUILD_DATE}"
+                COUNT="${COMM_COUNT}"
+                HASH="${COMM_HASH}"
+                DATE="${BUILD_DATE}"
 	else
 		CITRON_TAG=$(git describe --tags)
                 COMM_COUNT="$(git rev-list --count HEAD)"
@@ -46,9 +46,9 @@ fi
 		echo "Making stable \"$CITRON_TAG\" build"
 		git checkout "$CITRON_TAG"
 		VERSION="$(echo "$CITRON_TAG" | awk -F'-' '{print $1}')"
-                export COUNT="${COMM_COUNT}"
-                export HASH="${COMM_HASH}"
-                export DATE="${BUILD_DATE}"
+                COUNT="${COMM_COUNT}"
+                HASH="${COMM_HASH}"
+                DATE="${BUILD_DATE}"
 	fi
 	git submodule update --init --recursive -j$(nproc)
 
@@ -79,9 +79,15 @@ fi
 	ninja
 	sudo ninja install
 	echo "$VERSION" >~/version
+        echo "$COUNT" >~/count
+        echo "$HASH" >~/hash
+        echo "$DATE" >~/date
 )
 rm -rf ./citron
 VERSION="$(cat ~/version)"
+COUNT="$(cat ~/count)"
+HASH="$(cat ~/hash)"
+DATE="$(cat ~/date)"
 
 # NOW MAKE APPIMAGE
 mkdir ./AppDir
