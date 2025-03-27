@@ -82,7 +82,7 @@ jobs:
       - name: Nightly Releaser
         uses: softprops/action-gh-release@v2
         with:
-          name: "Nightly Version: ${{ env.APP_VERSION }}"
+          name: "Citron Nightly Release Appimage: ${{ env.APP_VERSION }}"
           tag_name: "nightly"
           prerelease: true
           draft: false
