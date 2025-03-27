@@ -1,10 +1,14 @@
 # Citron-AppImage-Optimized-for-Steamdeck
 
-This repository makes builds with flags of optimization especially for **Steamdeck**.
+This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-* [Latest Stable Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
+Another **PGO** optimization Build will build locally on a Steamdeck Oled and add to the relase page manually.
+
+Due the complexity of PGO two phase building, it can't be built automatically through CI for now.
 
 * [Latest Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/tag/nightly)
+* [Latest Stable Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
+
 
 ---------------------------------------------------------------
 
