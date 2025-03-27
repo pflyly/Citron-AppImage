@@ -1,10 +1,10 @@
-# Citron-AppImage
+# Citron-AppImage-Optimized-for-Steamdeck
 
-This repository makes builds for **aarch64**, **x86_64** (generic) and **x86_64_v3**. If your CPU is less than 10 years old use the x86_64_v3 build since it has a significant performance boost.
+This repository makes builds with flags of optimization especially for **Steamdeck**.
 
-* [Latest Stable Release](https://github.com/pkgforge-dev/Citron-AppImage/releases/latest)
+* [Latest Stable Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
-* [Latest Nightly Release](https://github.com/pkgforge-dev/Citron-AppImage/releases/tag/nightly)
+* [Latest Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/tag/nightly)
 
 ---------------------------------------------------------------
 

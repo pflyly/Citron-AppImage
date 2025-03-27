@@ -11,16 +11,10 @@ URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime
 
 if [ "$ARCH" = 'x86_64' ]; then
 	if [ "$1" = 'v3' ]; then
-		echo "Making x86-64-v3 optimized build of citron"
-		ARCH="${ARCH}_v3"
-		ARCH_FLAGS="-march=x86-64-v3 -O3"
-	else
-		echo "Making x86-64 generic build of citron"
-		ARCH_FLAGS="-march=x86-64 -mtune=generic -O3"
+		echo "Making optimized build of citron for Steamdeck"
+		ARCH="${ARCH}"
+		ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
 	fi
-else
-	echo "Making aarch64 build of citron"
-	ARCH_FLAGS="-march=armv8-a -mtune=generic -O3"
 fi
 
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
@@ -35,14 +29,25 @@ fi
 (
 	cd ./citron
 	if [ "$DEVEL" = 'true' ]; then
-		CITRON_TAG="$(git rev-parse --short HEAD)"
-		echo "Making nightly \"$CITRON_TAG\" build"
-		VERSION="$CITRON_TAG"
+                COMM_COUNT="$(git rev-list --count HEAD)"
+		COMM_HASH="$(git rev-parse --short HEAD)"
+                BUILD_DATE="$(date +"%Y%m%d")"
+		echo "Making nightly build"
+		VERSION="nightly"
+                COUNT="${COMM_COUNT}"
+                HASH="${COMM_HASH}"
+                DATE="${BUILD_DATE}"
 	else
 		CITRON_TAG=$(git describe --tags)
+		BUILD_DATE="$(date +"%Y%m%d")"
 		echo "Making stable \"$CITRON_TAG\" build"
 		git checkout "$CITRON_TAG"
+                COMM_COUNT="$(git rev-list --count HEAD)"
+                COMM_HASH="$(git rev-parse --short HEAD)"
 		VERSION="$(echo "$CITRON_TAG" | awk -F'-' '{print $1}')"
+                COUNT="${COMM_COUNT}"
+                HASH="${COMM_HASH}"
+                DATE="${BUILD_DATE}"
 	fi
 	git submodule update --init --recursive -j$(nproc)
 
@@ -56,18 +61,15 @@ fi
 		-DCITRON_USE_BUNDLED_QT=OFF \
 		-DUSE_SYSTEM_QT=ON \
 		-DCITRON_USE_BUNDLED_FFMPEG=OFF \
-		-DCITRON_USE_BUNDLED_SDL2=ON \
-		-DCITRON_USE_EXTERNAL_SDL2=OFF \
 		-DCITRON_TESTS=OFF \
 		-DCITRON_CHECK_SUBMODULES=OFF \
 		-DCITRON_USE_LLVM_DEMANGLE=OFF \
+                -DCITRON_USE_BUNDLED_SDL2=ON \
+ 		-DCITRON_USE_EXTERNAL_SDL2=OFF \
 		-DCITRON_ENABLE_LTO=ON \
-		-DCITRON_USE_QT_MULTIMEDIA=ON \
-		-DCITRON_USE_QT_WEB_ENGINE=OFF \
 		-DENABLE_QT_TRANSLATION=ON \
 		-DUSE_DISCORD_PRESENCE=OFF \
 		-DBUNDLE_SPEEX=ON \
-		-DCITRON_USE_FASTER_LD=OFF \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
 		-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
@@ -76,9 +78,15 @@ fi
 	ninja
 	sudo ninja install
 	echo "$VERSION" >~/version
+        echo "$COUNT" >~/count
+        echo "$HASH" >~/hash
+        echo "$DATE" >~/date
 )
 rm -rf ./citron
 VERSION="$(cat ~/version)"
+COUNT="$(cat ~/count)"
+HASH="$(cat ~/hash)"
+DATE="$(cat ~/date)"
 
 # NOW MAKE APPIMAGE
 mkdir ./AppDir
@@ -105,6 +113,7 @@ xvfb-run -a -- ./lib4bin -p -v -e -s -k \
 	/usr/lib/libvulkan* \
 	/usr/lib/libXss.so* \
 	/usr/lib/libdecor-0.so* \
+        /usr/lib/libSDL3.so* \
 	/usr/lib/qt6/plugins/audio/* \
 	/usr/lib/qt6/plugins/bearer/* \
 	/usr/lib/qt6/plugins/imageformats/* \
@@ -121,10 +130,6 @@ xvfb-run -a -- ./lib4bin -p -v -e -s -k \
 	/usr/lib/alsa-lib/*
 
 # Prepare sharun
-if [ "$ARCH" = 'aarch64' ]; then
-	# allow the host vulkan to be used for aarch64 given the sed situation
-	echo 'SHARUN_ALLOW_SYS_VKICD=1' > ./.env
-fi
 ln ./sharun ./AppRun
 ./sharun -g
 
@@ -146,7 +151,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S24 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Citron-"$VERSION"-anylinux-"$ARCH".AppImage
+	-i ./AppDir -o Citron-"$VERSION"-"${DATE}"-"${COUNT}"-"${HASH}"-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
