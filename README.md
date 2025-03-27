@@ -2,7 +2,7 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-Another **PGO** optimization Build will build locally on a Steamdeck Oled and add to the relase page manually.
+Another **PGO** optimization Build will be built locally via Citron_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled and add to the relase page manually.
 
 Due the complexity of PGO two phase building, it can't be built automatically through CI for now.
 
