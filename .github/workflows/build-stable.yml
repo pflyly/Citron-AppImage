@@ -88,6 +88,6 @@ jobs:
           prerelease: false
           draft: false
           generate_release_notes: false
-          make_latest: true
+          make_latest: false
           files: |
             *.AppImage*
