@@ -83,7 +83,7 @@ jobs:
       - name: Stable Releaser
         uses: softprops/action-gh-release@v2
         with:
-          name: "Citron AppImage ${{ env.APP_VERSION }}"
+          name: "Citron Stable Release Appimage: ${{ env.APP_VERSION }}"
           tag_name: "${{ env.APP_VERSION }}"
           prerelease: false
           draft: false
