@@ -2,18 +2,18 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-The **PGO** optimized Build will be built locally via Citron_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled.
+The **PGO** optimized Build is built locally via Citron_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled.
 
-Due to the complexity of PGO two phase building, it can't be built automatically through CI for now.
+Due to the complexity of PGO two phase building, it can't be built automatically through CI at least for now.
 
 * [Latest Normal Optimized Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/tag/nightly)
 * [Latest PGO Optimized Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
 ---------------------------------------------------------------
 
-AppImage made using [sharun](https://github.com/VHSgunzo/sharun), which makes it extremely easy to turn any binary into a portable package without using containers or similar tricks.
+Is this fork, AppImage made using original appimage-builder of citron directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
 
-**This AppImage bundles everything and should work on any linux distro, even on musl based ones.**
+**This AppImage aim only for Steamdeck, so we don't need to bundle every lib, which can keep the final appimage as small as possible.**
 
 It is possible that this appimage may fail to work with appimagelauncher, I recommend these alternatives instead: 
 
