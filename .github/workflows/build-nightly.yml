@@ -84,7 +84,7 @@ jobs:
         with:
           name: "Citron Appimage Nightly for Steamdeck: ${{ env.APP_VERSION }}"
           tag_name: "${{ env.APP_VERSION }}"
-          prerelease: true
+          prerelease: false
           draft: false
           generate_release_notes: false
           make_latest: true
