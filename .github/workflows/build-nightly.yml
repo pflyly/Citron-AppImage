@@ -82,7 +82,7 @@ jobs:
       - name: Nightly Releaser
         uses: softprops/action-gh-release@v2
         with:
-          name: "Citron Nightly Release Appimage: ${{ env.APP_VERSION }}"
+          name: "Citron Appimage Nightly for Steamdeck: ${{ env.APP_VERSION }}"
           tag_name: "nightly"
           prerelease: true
           draft: false
