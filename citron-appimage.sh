@@ -116,5 +116,5 @@ echo "Generating AppImage..."
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
-mv *.AppImage* ~/
+
 echo "All Done!"
