@@ -48,7 +48,6 @@ else
     DATE="${BUILD_DATE}"
 fi
 git submodule update --init --recursive -j$(nproc)
-git checkout edfb500ee7
 
 #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
 find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
