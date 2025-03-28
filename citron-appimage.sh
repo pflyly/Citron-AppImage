@@ -88,7 +88,9 @@ HASH="$(cat ~/hash)"
 DATE="$(cat ~/date)"
 
 # Make appimage using citron appimage-builder.sh, we only need it to generate the appdir
-cd.. && ./appimage-builder.sh citron ./Citron/build
+cd.. 
+chmod +x ./citron/appimage-builder.sh
+./citron/appimage-builder.sh citron ./Citron/build
 cd ./Citron/build/deploy-linux
 rm -rf ./Citron/build/deploy-linux/citron*.AppImage # Delete the generated appimage, cause it's useless now
 cp /usr/lib/libSDL3.so* ./Citron/build/deploy-linux/AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
