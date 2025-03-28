@@ -105,7 +105,7 @@ pacman -U --noconfirm \
 	./ffmpeg-mini-x86_64.pkg.tar.zst \
 	./llvm-libs.pkg.tar.zst
 
-rm -f .	./libxml2-iculess.pkg.tar.zst \
+rm -f ./libxml2-iculess.pkg.tar.zst \
 	./ffmpeg-mini-x86_64.pkg.tar.zst \
 	./llvm-libs.pkg.tar.zst
 
