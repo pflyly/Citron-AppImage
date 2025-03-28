@@ -31,6 +31,7 @@ pacman -Syu --noconfirm \
 	doxygen \
 	enet \
 	ffmpeg \
+        fuse2 \
 	ffmpeg4.4 \
 	fmt \
 	gamemode \
@@ -63,9 +64,13 @@ pacman -Syu --noconfirm \
 	python-pip \
 	qt6-base \
 	qt6ct \
+        qt6-svg \
+	qt6-declarative \
+        qt6-webengine \
 	qt6-multimedia \
 	qt6-tools \
 	qt6-wayland \
+        rapidjson \
 	sdl2 \
         sdl3 \
 	strace \
