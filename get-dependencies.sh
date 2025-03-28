@@ -67,6 +67,7 @@ pacman -Syu --noconfirm \
 	qt6-tools \
 	qt6-wayland \
 	sdl2 \
+        sdl3 \
 	strace \
 	unzip \
 	vulkan-headers \
