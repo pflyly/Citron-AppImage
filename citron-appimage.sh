@@ -88,15 +88,14 @@ HASH="$(cat ~/hash)"
 DATE="$(cat ~/date)"
 
 # Make appimage using citron appimage-builder.sh, we only need it to generate the appdir
-cd .. 
-chmod +x ./citron/appimage-builder.sh
-./citron/appimage-builder.sh citron ./Citron/build
-cd ./Citron/build/deploy-linux
-rm -rf ./Citron/build/deploy-linux/citron*.AppImage # Delete the generated appimage, cause it's useless now
-cp /usr/lib/libSDL3.so* ./Citron/build/deploy-linux/AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
+cd ..
+chmod +x ./appimage-builder.sh
+./appimage-builder.sh citron ./build
+cd ./build/deploy-linux
+rm -rf ./citron*.AppImage # Delete the generated appimage, cause it's useless now
+cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
 
 # Turn appdir into appimage
-cd ./Citron/build/deploy-linux/
 wget -q "$URUNTIME" -O ./uruntime
 chmod +x ./uruntime
 
@@ -117,5 +116,5 @@ echo "Generating AppImage..."
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
-mv *.AppImage* ..
+mv *.AppImage* ~/
 echo "All Done!"
