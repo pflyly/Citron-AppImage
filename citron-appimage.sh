@@ -88,7 +88,7 @@ HASH="$(cat ~/hash)"
 DATE="$(cat ~/date)"
 
 # Make appimage using citron appimage-builder.sh, we only need it to generate the appdir
-cd.. 
+cd .. 
 chmod +x ./citron/appimage-builder.sh
 ./citron/appimage-builder.sh citron ./Citron/build
 cd ./Citron/build/deploy-linux
