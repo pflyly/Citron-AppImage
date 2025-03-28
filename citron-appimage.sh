@@ -116,5 +116,9 @@ echo "Generating AppImage..."
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
+cd ..
+cd ..
+cd ..
+mv ./citron/build/deploy-linux/*.AppImage* ./
 
 echo "All Done!"
