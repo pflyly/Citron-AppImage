@@ -71,7 +71,7 @@ cmake .. -GNinja \
 	-DUSE_DISCORD_PRESENCE=OFF \
 	-DBUNDLE_SPEEX=ON \
 	-DCMAKE_INSTALL_PREFIX=/usr \
-	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
+	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error -w" \
 	-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
 	-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	-DCMAKE_BUILD_TYPE=Release
@@ -109,7 +109,7 @@ echo "Generating AppImage..."
 ./uruntime --appimage-mkdwarfs -f \
 	--set-owner 0 --set-group 0 \
 	--no-history --no-create-timestamp \
-	--compression zstd:level=22 -S24 -B16 \
+	--compression zstd:level=22 -S26 -B32 \
 	--header uruntime \
 	-i ./AppDir -o Citron-"$VERSION"-"${DATE}"-"${COUNT}"-"${HASH}"-"$ARCH".AppImage
 
