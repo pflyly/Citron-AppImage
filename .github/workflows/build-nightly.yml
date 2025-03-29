@@ -4,8 +4,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  schedule:
-    - cron: "0 0 * * *"
+  push:
+    branches: [ "main" ]
   workflow_dispatch: {}
 
 jobs:
@@ -16,17 +16,9 @@ jobs:
       matrix:
         include:
           - runs-on: ubuntu-latest
-            optimized: false
-            name: "Citron build (Normal)"
-            arch: x86_64
-          - runs-on: ubuntu-latest
             optimized: true
             name: "Citron Build (Optimized)"
             arch: x86_64
-          - runs-on: ubuntu-24.04-arm
-            name: "Citron Build (Normal)"
-            optimized: false
-            arch: aarch64
     container: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
       - uses: actions/checkout@v4
@@ -36,13 +28,6 @@ jobs:
       - name: Install dependencies
         if: always()
         run: chmod +x ./get-dependencies.sh && ./get-dependencies.sh
-
-      - name: Compile Citron (Normal)
-        if: ${{ matrix.optimized == false }}
-        run: |
-          chmod +x ./citron-appimage.sh && DEVEL=true ./citron-appimage.sh
-          mkdir -p dist
-          mv *.AppImage* dist/
 
       - name: Compile Citron (Optimized)
         if: ${{ matrix.optimized == true }}
@@ -59,21 +44,22 @@ jobs:
           name: citron-${{ matrix.optimized && 'optimized' || 'normal' }}-appimage-${{ matrix.arch }}
           path: "dist"
 
-      - name: Check version file
+      - name: Check hash file
         if: ${{ matrix.optimized == false }}
         run: |
-          cat ~/version
-          echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
+          cat ~/hash
+          echo "APP_VERSION=$(cat ~/hash)" >> "${GITHUB_ENV}"
 
-      - name: Upload version file
+      - name: Upload hash file
         uses: actions/upload-artifact@v4.6.1
         with:
-          name: version
-          path: ~/version
+          name: hash
+          path: ~/hash
           overwrite: true
 
   release:
     name: "release"
+    if: ${{ github.ref_name == 'main' }}
     needs: [build]
     permissions:
       actions: read
@@ -84,39 +70,24 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: citron-optimized-appimage-x86_64
-
+          
       - uses: actions/download-artifact@v4.1.9
         with:
-          name: citron-normal-appimage-x86_64
-
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: citron-normal-appimage-aarch64
-
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: version
-
-      - name: Read version
+          name: hash
+          
+      - name: Read hash
         run: |
-          export VERSION="$(cat version)"
+          export VERSION="$(cat hash)"
           echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
 
-      - name: Del Previous Release
-        run: |
-          gh release delete "nightly" --repo "${GITHUB_REPOSITORY}" --cleanup-tag  -y
-          sleep 5
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        continue-on-error: true
-
-      - uses: softprops/action-gh-release@v2
+      - name: Nightly Releaser
+        uses: softprops/action-gh-release@v2
         with:
-          name: "Continuous Build (Nightly Version: ${{ env.APP_VERSION }})"
-          tag_name: "nightly"
-          prerelease: true
+          name: "Citron Appimage Nightly for Steamdeck: ${{ env.APP_VERSION }}"
+          tag_name: "${{ env.APP_VERSION }}"
+          prerelease: false
           draft: false
           generate_release_notes: false
-          make_latest: false
+          make_latest: true
           files: |
             *.AppImage*

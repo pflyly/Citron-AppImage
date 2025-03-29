@@ -1,16 +1,19 @@
-# Citron-AppImage
+# Citron-AppImage-Optimized-for-Steamdeck
 
-This repository makes builds for **aarch64**, **x86_64** (generic) and **x86_64_v3**. If your CPU is less than 10 years old use the x86_64_v3 build since it has a significant performance boost.
+This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-* [Latest Stable Release](https://github.com/pkgforge-dev/Citron-AppImage/releases/latest)
+The **PGO** optimized Build is built locally via Citron_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled.
 
-* [Latest Nightly Release](https://github.com/pkgforge-dev/Citron-AppImage/releases/tag/nightly)
+Due to the complexity of PGO two phase building, it can't be built automatically through CI at least for now.
+
+* [Latest Normal Optimized Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
+* [Latest PGO Optimized Release](https://github.com/pflyly/Citron-AppImage/releases/PGO_optimized)
 
 ---------------------------------------------------------------
 
-AppImage made using [sharun](https://github.com/VHSgunzo/sharun), which makes it extremely easy to turn any binary into a portable package without using containers or similar tricks.
+Is this fork, AppImage made using original appimage-builder of citron directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
 
-**This AppImage bundles everything and should work on any linux distro, even on musl based ones.**
+**This AppImage aim only for Steamdeck, so we don't need to bundle every lib, which can keep the final appimage as small as possible.**
 
 It is possible that this appimage may fail to work with appimagelauncher, I recommend these alternatives instead: 
 

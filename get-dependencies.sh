@@ -31,6 +31,7 @@ pacman -Syu --noconfirm \
 	doxygen \
 	enet \
 	ffmpeg \
+        fuse2 \
 	ffmpeg4.4 \
 	fmt \
 	gamemode \
@@ -66,7 +67,9 @@ pacman -Syu --noconfirm \
 	qt6-multimedia \
 	qt6-tools \
 	qt6-wayland \
+        rapidjson \
 	sdl2 \
+        sdl3 \
 	strace \
 	unzip \
 	vulkan-headers \
@@ -97,13 +100,13 @@ wget --retry-connrefused --tries=30 "$LIBXML_URL" -O ./libxml2-iculess.pkg.tar.z
 wget --retry-connrefused --tries=30 "$FFMPEG_URL" -O ./ffmpeg-mini-x86_64.pkg.tar.zst
 
 pacman -U --noconfirm \
-	./qt6-base-iculess.pkg.tar.zst \
+        ./qt6-base-iculess.pkg.tar.zst \
 	./libxml2-iculess.pkg.tar.zst \
 	./ffmpeg-mini-x86_64.pkg.tar.zst \
 	./llvm-libs.pkg.tar.zst
 
 rm -f ./qt6-base-iculess.pkg.tar.zst \
-	./libxml2-iculess.pkg.tar.zst \
+        ./libxml2-iculess.pkg.tar.zst \
 	./ffmpeg-mini-x86_64.pkg.tar.zst \
 	./llvm-libs.pkg.tar.zst
 
