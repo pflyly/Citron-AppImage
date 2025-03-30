@@ -2,12 +2,7 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-The **PGO** optimized Build is built locally via Citron_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled.
-
-Due to the complexity of PGO two phase building, it can't be built automatically through CI at least for now.
-
 * [Latest Normal Optimized Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
-* [Latest PGO Optimized Release](https://github.com/pflyly/Citron-AppImage/releases/PGO_optimized)
 
 ---------------------------------------------------------------
 
