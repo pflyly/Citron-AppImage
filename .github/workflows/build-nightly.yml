@@ -32,7 +32,8 @@ jobs:
       - name: Compile Citron (Optimized)
         if: ${{ matrix.optimized == true }}
         run: |
-          chmod +x ./citron-appimage.sh ./citron-appimage.sh
+          chmod +x ./citron-appimage.sh
+          ./citron-appimage.sh
           mkdir -p dist
           mv *.AppImage* dist/
 
