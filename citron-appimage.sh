@@ -8,14 +8,7 @@ export ARCH="$(uname -m)"
 REPO="https://git.citron-emu.org/Citron/Citron.git"
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
-
-if [ "$ARCH" = 'x86_64' ]; then
-	if [ "$1" = 'v3' ]; then
-		echo "Making optimized build of citron for Steamdeck"
-		ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
-	fi
-fi
-
+ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
 # BUILD CITRON, fallback to mirror if upstream repo fails to clone
@@ -26,27 +19,11 @@ if ! git clone 'https://git.citron-emu.org/Citron/Citron.git' ./citron; then
 fi
 
 cd ./citron
-if [ "$DEVEL" = 'true' ]; then
-    COMM_COUNT="$(git rev-list --count HEAD)"
-    COMM_HASH="$(git rev-parse --short HEAD)"
-    BUILD_DATE="$(date +"%Y%m%d")"
-    echo "Making nightly build"
-    VERSION="nightly"
-    COUNT="${COMM_COUNT}"
-    HASH="${COMM_HASH}"
-    DATE="${BUILD_DATE}"
-else
-    CITRON_TAG=$(git describe --tags)
-    BUILD_DATE="$(date +"%Y%m%d")"
-    echo "Making stable \"$CITRON_TAG\" build"
-    git checkout "$CITRON_TAG"
-    COMM_COUNT="$(git rev-list --count HEAD)"
-    COMM_HASH="$(git rev-parse --short HEAD)"
-    VERSION="$(echo "$CITRON_TAG" | awk -F'-' '{print $1}')"
-    COUNT="${COMM_COUNT}"
-    HASH="${COMM_HASH}"
-    DATE="${BUILD_DATE}"
-fi
+COUNT="$(git rev-list --count HEAD)"
+HASH="$(git rev-parse --short HEAD)"
+DATE="$(date +"%Y%m%d")"
+echo "Making nightly build"
+
 git submodule update --init --recursive -j$(nproc)
 
 #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
@@ -70,6 +47,7 @@ cmake .. -GNinja \
 	-DENABLE_QT_TRANSLATION=ON \
 	-DUSE_DISCORD_PRESENCE=OFF \
 	-DBUNDLE_SPEEX=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 	-DCMAKE_INSTALL_PREFIX=/usr \
 	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error -w" \
 	-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
@@ -77,24 +55,17 @@ cmake .. -GNinja \
 	-DCMAKE_BUILD_TYPE=Release
 ninja
 sudo ninja install
-echo "$VERSION" >~/version
-echo "$COUNT" >~/count
 echo "$HASH" >~/hash
-echo "$DATE" >~/date
-VERSION="$(cat ~/version)"
-COUNT="$(cat ~/count)"
-HASH="$(cat ~/hash)"
-DATE="$(cat ~/date)"
 
 # Make appimage using citron appimage-builder.sh, we only need it to generate the appdir
 cd ..
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh citron ./build
-cd ./build/deploy-linux
-rm -rf ./citron*.AppImage # Delete the generated appimage, cause it's useless now
-cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
+rm -rf ./build/deploy-linux/citron*.AppImage # Delete the generated appimage, cause it's useless now
+cp /usr/lib/libSDL3.so* ./build/deploy-linux/AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
 
 # Turn appdir into appimage
+cd ..
 wget -q "$URUNTIME" -O ./uruntime
 chmod +x ./uruntime
 
@@ -111,13 +82,9 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S26 -B32 \
 	--header uruntime \
-	-i ./AppDir -o Citron-"$VERSION"-"${DATE}"-"${COUNT}"-"${HASH}"-"$ARCH".AppImage
+	-i ./citron/build/deploy-linux/AppDir -o Citron-nightly-"${DATE}"-"${COUNT}"-"${HASH}"-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
-cd ..
-cd ..
-cd ..
-mv ./citron/build/deploy-linux/*.AppImage* ./
 
 echo "All Done!"
