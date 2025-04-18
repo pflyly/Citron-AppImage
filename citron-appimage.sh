@@ -5,8 +5,6 @@ set -ex
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 
-REPO="https://git.citron-emu.org/Citron/Citron.git"
-LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
@@ -46,7 +44,7 @@ cmake .. -GNinja \
 	-DBUNDLE_SPEEX=ON \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 	-DCMAKE_INSTALL_PREFIX=/usr \
-	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error -w" \
+	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
 	-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
 	-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	-DCMAKE_BUILD_TYPE=Release
