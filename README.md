@@ -1,4 +1,10 @@
-# Citron-Optimized-AppImage
+<h1 align="center">
+  <br>
+  <a href="https://citron-emu.org"><img src="https://git.citron-emu.org/Citron/Citron/raw/branch/master/dist/citron.ico" width="220"></a>
+  <br>
+  <b>Citron-Optimized-AppImage</b>
+  <br>
+</h1>
 
 [![GitHub Release](https://img.shields.io/github/v/release/pflyly/Citron-AppImage?label=Current%20Release)](https://github.com/pflyly/Citron-AppImage/releases/latest)
 [![GitHub Downloads](https://img.shields.io/github/downloads/pflyly/Citron-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pflyly/Citron-AppImage/releases/latest)
