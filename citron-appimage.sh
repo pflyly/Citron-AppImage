@@ -6,7 +6,7 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
-ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
+ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -fno-plt -flto=auto -Wno-error"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
 # BUILD CITRON, fallback to mirror if upstream repo fails to clone
@@ -30,24 +30,23 @@ find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::as
 mkdir build
 cd build
 cmake .. -GNinja \
-	-DCITRON_USE_BUNDLED_VCPKG=OFF \
-	-DCITRON_USE_BUNDLED_QT=OFF \
- 	-DUSE_SYSTEM_QT=ON \
-	-DCITRON_TESTS=OFF \
-	-DCITRON_CHECK_SUBMODULES=OFF \
+	-DCITRON_USE_BUNDLED_VCPKG=ON \
+ 	-DCITRON_TESTS=OFF \
+  	-DCITRON_CHECK_SUBMODULES=OFF \
 	-DCITRON_USE_LLVM_DEMANGLE=OFF \
-        -DCITRON_USE_BUNDLED_SDL2=ON \
- 	-DCITRON_USE_EXTERNAL_SDL2=OFF \
-	-DCITRON_ENABLE_LTO=ON \
-	-DENABLE_QT_TRANSLATION=ON \
+ 	-DCITRON_ENABLE_LTO=ON \
+  	-DCITRON_USE_FASTER_LD=ON \
+   	-DENABLE_QT_TRANSLATION=ON \
 	-DUSE_DISCORD_PRESENCE=OFF \
-	-DBUNDLE_SPEEX=ON \
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-	-DCMAKE_INSTALL_PREFIX=/usr \
-	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
-	-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
+ 	-DSDL_PIPEWIRE=OFF \
+   	-DBUNDLE_SPEEX=ON \
+    	-DCMAKE_INSTALL_PREFIX=/usr \
+     	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -mfpmath=both" \
+      	-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
+       	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" \
 	-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
-	-DCMAKE_BUILD_TYPE=Release
+ 	-DCMAKE_BUILD_TYPE=Release \
+  	-DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
 sudo ninja install
 echo "$HASH" >~/hash
