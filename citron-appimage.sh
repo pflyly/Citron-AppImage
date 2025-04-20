@@ -21,7 +21,7 @@ fi
 
 if [ "$1" = 'common' ]; then
 	echo "Making Citron Optimized Build for Modern CPUs "
-	ARCH_FLAGS="-march=x86-64-v3 -mtune=x86-64-v3"
+	ARCH_FLAGS="-march=x86-64-v3"
  	ARCH="${ARCH}_v3"
   	TARGET="Common"
 fi
