@@ -1,6 +1,6 @@
-<h1 align="center">
+<h1 align="left">
   <br>
-  <a href="https://citron-emu.org"><img src="https://git.citron-emu.org/Citron/Citron/raw/branch/master/dist/citron.ico" width="220"></a>
+  <a href="https://citron-emu.org"><img src="https://git.citron-emu.org/Citron/Citron/raw/branch/master/dist/citron.ico" width="200"></a>
   <br>
   <b>Citron-Optimized-AppImage</b>
   <br>
