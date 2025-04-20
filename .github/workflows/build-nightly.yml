@@ -35,7 +35,7 @@ jobs:
         run: chmod +x ./get-dependencies.sh && ./get-dependencies.sh
 
       - name: Compile Citron Steamdeck
-        if: ${{ matrix.target == steamdeck }}
+        if: ${{ matrix.target == 'steamdeck' }}
         run: |
           chmod +x ./citron-appimage.sh
           ./citron-appimage.sh steamdeck
@@ -43,7 +43,7 @@ jobs:
           mv *.AppImage* dist/
           
       - name: Compile Citron ROG
-        if: ${{ matrix.target == rog }}
+        if: ${{ matrix.target == 'rog' }}
         run: |
           chmod +x ./citron-appimage.sh
           ./citron-appimage.sh rog
@@ -51,7 +51,7 @@ jobs:
           mv *.AppImage* dist/
 
       - name: Compile Citron Common
-        if: ${{ matrix.target == common }}
+        if: ${{ matrix.target == 'common' }}
         run: |
           chmod +x ./citron-appimage.sh
           ./citron-appimage.sh common
