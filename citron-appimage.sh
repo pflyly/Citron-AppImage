@@ -49,6 +49,7 @@ git submodule update --init --recursive -j$(nproc)
 mkdir build
 cd build
 cmake .. -GNinja \
+	-DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake \
 	-DCITRON_USE_BUNDLED_VCPKG=ON \
  	-DCITRON_USE_BUNDLED_QT=OFF \
   	-DUSE_SYSTEM_QT=ON \
