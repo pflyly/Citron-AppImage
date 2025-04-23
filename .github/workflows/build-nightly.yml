@@ -10,7 +10,7 @@ on:
 
 jobs:
   citron_build: 
-    runs-on: ${{ matrix.runs-on }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         target: [steamdeck, rog, common]
