@@ -30,14 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vcpkg-
 
-      - name: Install vcpkg
-        run: |
-          if [ ! -d "./vcpkg" ]; then
-            git clone https://github.com/microsoft/vcpkg.git
-            ./vcpkg/bootstrap-vcpkg.sh
-          fi
-          ./vcpkg/vcpkg install --manifest
-
       - name: Cache dependencies
         id: deps-cache
         uses: actions/cache@v4
