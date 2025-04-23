@@ -46,6 +46,12 @@ HASH="$(git rev-parse --short HEAD)"
 DATE="$(date +"%Y%m%d")"
 git submodule update --init --recursive -j$(nproc)
 
+if [ ! -d "./vcpkg" ]; then
+    git clone https://github.com/microsoft/vcpkg.git
+    ./vcpkg/bootstrap-vcpkg.sh
+fi
+./vcpkg/vcpkg install --manifest
+
 mkdir build
 cd build
 cmake .. -GNinja \
