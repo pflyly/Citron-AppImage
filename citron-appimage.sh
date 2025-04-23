@@ -7,24 +7,28 @@ export ARCH="$(uname -m)"
 
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 
-if [ "$1" = 'steamdeck' ]; then
-	echo "Making Citron Optimized Build for Steam Deck "
-	ARCH_FLAGS="-march=znver2 -mtune=znver2"
- 	TARGET="Steamdeck"
-fi
-
-if [ "$1" = 'rog' ]; then
-	echo "Making Citron Optimized Build for ROG Ally X "
-	ARCH_FLAGS="-march=znver4 -mtune=znver4"
- 	TARGET="ROG_Ally_X"
-fi
-
-if [ "$1" = 'common' ]; then
-	echo "Making Citron Optimized Build for Modern CPUs "
-	ARCH_FLAGS="-march=x86-64-v3"
- 	ARCH="${ARCH}_v3"
-  	TARGET="Common"
-fi
+case "$1" in
+    steamdeck)
+        echo "Making Citron Optimized Build for Steam Deck"
+        ARCH_FLAGS="-march=znver2 -mtune=znver2"
+        TARGET="Steamdeck"
+        ;;
+    rog)
+        echo "Making Citron Optimized Build for ROG Ally X"
+        ARCH_FLAGS="-march=znver4 -mtune=znver4"
+        TARGET="ROG_Ally_X"
+        ;;
+    common)
+        echo "Making Citron Optimized Build for Modern CPUs"
+        ARCH_FLAGS="-march=x86-64-v3"
+        ARCH="${ARCH}_v3"
+        TARGET="Common"
+        ;;
+    *)
+        echo "Unknown build target. Please specify 'steamdeck', 'rog', or 'common'."
+        exit 1
+        ;;
+esac
 
 EXTRA_FLAGS="-O3 -pipe -fno-plt -flto=auto -Wno-error"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
@@ -61,8 +65,9 @@ cmake .. -GNinja \
        	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" \
 	-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
  	-DCMAKE_BUILD_TYPE=Release \
+  	-DCMAKE_BUILD_PARALLEL_LEVEL=$(nproc) \
   	-DCMAKE_POLICY_VERSION_MINIMUM=3.5
-ninja
+ninja -j$(nproc)
 echo "$HASH" >~/hash
 echo "$(cat ~/hash)"
 
