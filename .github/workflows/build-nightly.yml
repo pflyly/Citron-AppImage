@@ -41,6 +41,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # Always ensure critical dependencies like git are installed
+          pacman -Sy --noconfirm git
           if [ ! -f ~/.dependencies/.installed ]; then
             chmod +x ./get-dependencies.sh
             ./get-dependencies.sh
