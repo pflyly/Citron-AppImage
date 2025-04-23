@@ -13,18 +13,9 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
-        include:
-          - runs-on: ubuntu-latest
-            name: "Citron Nightly"
-            target: steamdeck
-          - runs-on: ubuntu-latest
-            name: "Citron Nightly"
-            target: rog
-          - runs-on: ubuntu-latest
-            name: "Citron Nightly"
-            target: common
+        target: [steamdeck, rog, common]
     container: ghcr.io/pkgforge-dev/archlinux:latest
-    name: "${{ matrix.name }} (${{ matrix.target }})"
+    name: "Citron nightly (${{ matrix.target }})"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,27 +25,10 @@ jobs:
         if: always()
         run: chmod +x ./get-dependencies.sh && ./get-dependencies.sh
 
-      - name: Compile Citron Steamdeck
-        if: ${{ matrix.target == 'steamdeck' }}
+      - name: compile Citron ${{ matrix.target }}
         run: |
           chmod +x ./citron-appimage.sh
-          ./citron-appimage.sh steamdeck
-          mkdir -p dist
-          mv *.AppImage* dist/
-          
-      - name: Compile Citron ROG
-        if: ${{ matrix.target == 'rog' }}
-        run: |
-          chmod +x ./citron-appimage.sh
-          ./citron-appimage.sh rog
-          mkdir -p dist
-          mv *.AppImage* dist/
-
-      - name: Compile Citron Common
-        if: ${{ matrix.target == 'common' }}
-        run: |
-          chmod +x ./citron-appimage.sh
-          ./citron-appimage.sh common
+          ./citron-appimage.sh ${{ matrix.target }}
           mkdir -p dist
           mv *.AppImage* dist/
 
@@ -70,6 +44,7 @@ jobs:
           echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
 
       - name: Upload hash file
+        if: ${{ matrix.target == 'steamdeck' }}
         uses: actions/upload-artifact@v4.6.1
         with:
           name: hash
@@ -110,7 +85,7 @@ jobs:
 
       - name: Delete same tag release
         run: |
-          gh release delete "${{ env.APP_VERSION }}-${{ env.date }}" --repo "${GITHUB_REPOSITORY}" --cleanup-tag  -y
+          gh release delete "${{ env.date }}-${{ env.APP_VERSION }}" --repo "${GITHUB_REPOSITORY}" --cleanup-tag  -y
           sleep 5
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -120,7 +95,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: "Citron Nightly Appimage: ${{ env.APP_VERSION }}"
-          tag_name: "${{ env.APP_VERSION }}-${{ env.date }}"
+          tag_name: "${{ env.date }}-${{ env.APP_VERSION }}"
           prerelease: false
           draft: false
           generate_release_notes: false
