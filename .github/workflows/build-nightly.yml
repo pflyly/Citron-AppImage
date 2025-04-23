@@ -21,6 +21,15 @@ jobs:
         with:
           persist-credentials: false
           
+      - name: Cache vcpkg dependencies
+        id: vcpkg-cache
+        uses: actions/cache@v4
+        with:
+          path: vcpkg_installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
+          
       - name: Cache dependencies
         id: deps-cache
         uses: actions/cache@v4
@@ -37,14 +46,6 @@ jobs:
           ./get-dependencies.sh
           mkdir -p ~/.dependencies && touch ~/.dependencies/.installed
           
-      - name: Cache vcpkg dependencies
-        id: vcpkg-cache
-        uses: actions/cache@v4
-        with:
-          path: vcpkg_installed
-          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
-          restore-keys: |
-            ${{ runner.os }}-vcpkg-
       - name: compile Citron ${{ matrix.target }}
         run: |
           chmod +x ./citron-appimage.sh
