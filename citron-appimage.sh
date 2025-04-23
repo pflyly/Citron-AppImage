@@ -50,7 +50,7 @@ if [ ! -d "./vcpkg" ]; then
     git clone https://github.com/microsoft/vcpkg.git
     ./vcpkg/bootstrap-vcpkg.sh
 fi
-./vcpkg/vcpkg install --manifest
+./vcpkg/vcpkg install --x-manifest-root=.
 
 mkdir build
 cd build
