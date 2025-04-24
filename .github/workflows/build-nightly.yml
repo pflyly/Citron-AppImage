@@ -29,12 +29,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vcpkg-
 
+      - name: set up ccache
+        uses: actions/cache@v4
+        with:
+          path: /github/home/.ccache
+          key: ${{ runner.os }}-ccache-${{ matrix.target }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-${{ matrix.target }}-
+            
       - name: Install dependencies
         run: |
           chmod +x ./get-dependencies.sh
           ./get-dependencies.sh
           
       - name: compile Citron ${{ matrix.target }}
+        env:
+          CCACHE_DIR: /github/home/.ccache
         run: |
           chmod +x ./citron-appimage.sh
           ./citron-appimage.sh ${{ matrix.target }}
