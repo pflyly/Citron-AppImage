@@ -6,34 +6,41 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
-EXTRA_FLAGS="-O3 -pipe -fno-plt -flto=auto -Wno-error"
+
+EXTRA_FLAGS='-O3 -pipe -fno-plt -flto=auto -Wno-error'
+COMMON_OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS='-Wl,-O3 -Wl,--as-needed'"
 case "$1" in
     steamdeck)
         echo "Making Citron Optimized Build for Steam Deck"
         ARCH_FLAGS="-march=znver2 -mtune=znver2"
         TARGET="Steamdeck"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both\" -DCMAKE_C_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS}\" -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-O3 -Wl,--as-needed\""
-        ;; 
+        ;;
     rog)
         echo "Making Citron Optimized Build for ROG Ally X"
         ARCH_FLAGS="-march=znver4 -mtune=znver4"
         TARGET="ROG_Ally_X"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both\" -DCMAKE_C_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS}\" -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-O3 -Wl,--as-needed\""
         ;;
     common)
         echo "Making Citron Optimized Build for Modern CPUs"
         ARCH_FLAGS="-march=x86-64-v3"
         ARCH="${ARCH}_v3"
         TARGET="Common"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both\" -DCMAKE_C_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS}\" -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-O3 -Wl,--as-needed\""
         ;;
     check)
         echo "Checking build"
-	ARCH_FLAGS=""
- 	CCACHE="ccache"
-  	OPTIMIZE_FLAGS=""
+        ARCH_FLAGS=""
+        CCACHE="ccache"
         ;;
 esac
+
+if [ "$1" != "check" ]; then
+    CXX_FLAGS="${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both"
+    C_FLAGS="${ARCH_FLAGS} ${EXTRA_FLAGS}"
+    OPTIMIZE_FLAGS="${COMMON_OPTIMIZE_FLAGS} -DCMAKE_CXX_FLAGS='${CXX_FLAGS}' -DCMAKE_C_FLAGS='${C_FLAGS}'"
+else
+    OPTIMIZE_FLAGS=""
+fi
+echo "OPTIMIZE_FLAGS: ${OPTIMIZE_FLAGS}"
 
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
