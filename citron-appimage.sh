@@ -24,11 +24,14 @@ case "$1" in
         ARCH="${ARCH}_v3"
         TARGET="Common"
         ;;
-    *)
-        echo "Unknown build target. Please specify 'steamdeck', 'rog', or 'common'."
-        exit 1
+    check)
+        echo "Checking build"
+	ARCH_FLAGS=""
+ 	CCACHE="ccache"
         ;;
 esac
+
+OPTIMIZE_FLAGS=
 
 EXTRA_FLAGS="-O3 -pipe -fno-plt -flto=auto -Wno-error"
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
@@ -55,19 +58,24 @@ cmake .. -GNinja \
  	-DCITRON_TESTS=OFF \
   	-DCITRON_CHECK_SUBMODULES=OFF \
 	-DCITRON_USE_LLVM_DEMANGLE=OFF \
- 	-DCITRON_ENABLE_LTO=ON \
   	-DCITRON_USE_FASTER_LD=ON \
    	-DENABLE_QT_TRANSLATION=ON \
 	-DUSE_DISCORD_PRESENCE=OFF \
  	-DSDL_PIPEWIRE=OFF \
    	-DBUNDLE_SPEEX=ON \
+	-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_SYSTEM_PROCESSOR=x86_64 \
+ 	-DCMAKE_BUILD_TYPE=Release \
+  	-DCMAKE_C_COMPILER_LAUNCHER="$CCACHE" \
+   	-DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE" \
+    	"${OPTIMIZE_FLAGS[@]}"
+      	-DCITRON_ENABLE_LTO=ON \
      	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both" \
       	-DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS" \
        	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" \
-	-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
- 	-DCMAKE_BUILD_TYPE=Release \
-  	-DCMAKE_POLICY_VERSION_MINIMUM=3.5
+
+
 ninja -j$(nproc)
 echo "$HASH" >~/hash
 echo "$(cat ~/hash)"
