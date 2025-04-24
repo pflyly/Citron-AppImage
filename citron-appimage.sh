@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ex
 
@@ -13,20 +13,20 @@ case "$1" in
         ARCH_FLAGS="-march=znver2 -mtune=znver2"
         TARGET="Steamdeck"
 	CCACHE=""
-	OPTIMIZE_FLAGS==(-DCITRON_ENABLE_LTO=ON
-                 	 -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both"
-                 	 -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS"
-                 	 -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" )
+	OPTIMIZE_FLAGS=(-DCITRON_ENABLE_LTO=ON
+                 	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both"
+                 	-DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS"
+                 	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" )
         ;;
     rog)
         echo "Making Citron Optimized Build for ROG Ally X"
         ARCH_FLAGS="-march=znver4 -mtune=znver4"
         TARGET="ROG_Ally_X"
 	CCACHE=""
-	OPTIMIZE_FLAGS==(-DCITRON_ENABLE_LTO=ON
-                 	 -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both"
-                 	 -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS"
-                 	 -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" )
+	OPTIMIZE_FLAGS=(-DCITRON_ENABLE_LTO=ON
+                 	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both"
+                 	-DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS"
+                 	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" )
         ;;
     common)
         echo "Making Citron Optimized Build for Modern CPUs"
@@ -34,16 +34,16 @@ case "$1" in
         ARCH="${ARCH}_v3"
         TARGET="Common"
 	CCACHE=""
-	OPTIMIZE_FLAGS==(-DCITRON_ENABLE_LTO=ON
-                 	 -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both"
-                 	 -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS"
-                 	 -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" )
+	OPTIMIZE_FLAGS=(-DCITRON_ENABLE_LTO=ON
+                 	-DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both"
+                 	-DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS"
+                 	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" )
         ;;
     check)
         echo "Checking build"
 	ARCH_FLAGS=""
  	CCACHE="ccache"
-  	OPTIMIZE_FLAGS==("")
+  	OPTIMIZE_FLAGS=("")
         ;;
 esac
 
