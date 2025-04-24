@@ -67,7 +67,6 @@ cmake .. -GNinja \
        	-DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" \
 	-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
  	-DCMAKE_BUILD_TYPE=Release \
-  	-DCMAKE_BUILD_PARALLEL_LEVEL=$(nproc) \
   	-DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja -j$(nproc)
 echo "$HASH" >~/hash
