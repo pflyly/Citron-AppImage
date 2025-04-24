@@ -43,6 +43,7 @@ pacman -Syu --noconfirm \
 	libdecor \
 	libfdk-aac \
 	libopusenc \
+ 	libtheora \
 	libva \
 	libvpx \
 	libxi \
