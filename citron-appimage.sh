@@ -82,6 +82,7 @@ cmake .. -GNinja \
 ninja -j$(nproc)
 echo "$HASH" >~/hash
 echo "$(cat ~/hash)"
+ccache -s -v
 
 # Use citron appimage-builder.sh to generate AppDir
 cd ..
