@@ -12,20 +12,20 @@ case "$1" in
         echo "Making Citron Optimized Build for Steam Deck"
         ARCH_FLAGS="-march=znver2 -mtune=znver2"
         TARGET="Steamdeck"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both" -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed""
+	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both\" -DCMAKE_C_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS}\" -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-O3 -Wl,--as-needed\""
         ;; 
     rog)
         echo "Making Citron Optimized Build for ROG Ally X"
         ARCH_FLAGS="-march=znver4 -mtune=znver4"
         TARGET="ROG_Ally_X"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both" -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed""
+	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both\" -DCMAKE_C_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS}\" -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-O3 -Wl,--as-needed\""
         ;;
     common)
         echo "Making Citron Optimized Build for Modern CPUs"
         ARCH_FLAGS="-march=x86-64-v3"
         ARCH="${ARCH}_v3"
         TARGET="Common"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both" -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed""
+	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both\" -DCMAKE_C_FLAGS=\"${ARCH_FLAGS} ${EXTRA_FLAGS}\" -DCMAKE_EXE_LINKER_FLAGS=\"-Wl,-O3 -Wl,--as-needed\""
         ;;
     check)
         echo "Checking build"
