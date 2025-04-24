@@ -22,7 +22,6 @@ jobs:
           persist-credentials: false
           
       - name: Cache vcpkg dependencies
-        id: vcpkg-cache
         uses: actions/cache@v4
         with:
           path: /github/home/.cache/vcpkg/archives
