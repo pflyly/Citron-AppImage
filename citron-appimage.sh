@@ -13,7 +13,7 @@ case "$1" in
         ARCH_FLAGS="-march=znver2 -mtune=znver2"
         TARGET="Steamdeck"
 	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_CXX_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS -mfpmath=both" -DCMAKE_C_FLAGS="$ARCH_FLAGS $EXTRA_FLAGS" -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed""
-        ;;
+        ;; 
     rog)
         echo "Making Citron Optimized Build for ROG Ally X"
         ARCH_FLAGS="-march=znver4 -mtune=znver4"
