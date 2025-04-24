@@ -40,12 +40,11 @@ jobs:
             ${{ runner.os }}-dependencies-
 
       - name: Install dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
-          mkdir -p ~/.dependencies && touch ~/.dependencies/.installed 
-          if [ ! -f ~/.dependencies/.installed ]; then
-            chmod +x ./get-dependencies.sh
-            ./get-dependencies.sh
-          fi
+          chmod +x ./get-dependencies.sh
+          ./get-dependencies.sh
+          mkdir -p ~/.dependencies && touch ~/.dependencies/.installed
           
       - name: compile Citron ${{ matrix.target }}
         run: |
