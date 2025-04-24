@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [steamdeck, rog, common]
+        target: [steamdeck, rog, common, check]
     container: ghcr.io/pkgforge-dev/archlinux:latest
     name: "Citron nightly (${{ matrix.target }})"
     steps:
