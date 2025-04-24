@@ -21,13 +21,13 @@ jobs:
         with:
           persist-credentials: false
           
-      - name: Cache vcpkg dependencies for ${{ matrix.target }}
+      - name: Cache vcpkg dependencies
         uses: actions/cache@v4
         with:
           path: /github/home/.cache/vcpkg/archives
-          key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.target }}-vcpkg-
+            ${{ runner.os }}-vcpkg-
 
       - name: set up ccache for check
         if: ${{ matrix.target == 'check' }}
