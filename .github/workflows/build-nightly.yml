@@ -25,7 +25,7 @@ jobs:
         id: vcpkg-cache
         uses: actions/cache@v4
         with:
-          path: $HOME/.cache/vcpkg/archives
+          path: /github/home/.cache/vcpkg/archives
           key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-vcpkg-
