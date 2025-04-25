@@ -72,6 +72,7 @@ jobs:
           overwrite: true
   android: 
     runs-on: ubuntu-latest
+    name: "Citron nightly (android)"
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_COMPILERCHECK: content
@@ -95,6 +96,17 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install ccache apksigner -y
+          
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 29
+          ndk: 29.0.13113456
+          cmake: true
+
+      - name: Accept Android SDK Licenses
+        run: yes | sdkmanager --licenses    
+        
       - name: compile Citron android
         run: |
           chmod +x ./citron-android.sh
