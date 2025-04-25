@@ -103,7 +103,7 @@ jobs:
           ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v@v4.6.1
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: ${{ env.OS }}-${{ env.TARGET }}
           path: src/android/app/artifacts/
