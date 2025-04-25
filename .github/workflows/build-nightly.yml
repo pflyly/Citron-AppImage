@@ -95,13 +95,19 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install cmake ccache apksigner -y
+          sudo apt-get install ccache apksigner -y
           
       - name: Set up Android SDK
-        run: sdkmanager --install "ndk;29.0.13113456" "cmake;4.0.1"
-
+        with:
+           api-level: 29
+           ndk: 29.0.13113456
+           cmake: true
+         
       - name: Accept Android SDK Licenses
-        run: yes | sdkmanager --licenses    
+        run: yes | sdkmanager --licenses
+        
+      - name: install cmake
+        run: sdkmanager --install "cmake;4.0.1"
         
       - name: compile Citron android
         run: |
