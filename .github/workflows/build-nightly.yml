@@ -96,32 +96,16 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install ccache apksigner -y
-          
-      - name: Set up Android SDK
-        run: |
-          wget "https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" -O cmdline-tools.zip
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools/
-          mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;29.0.13113456" "cmake;3.31.6"
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses
-        env:
-          ANDROID_HOME: ${{ runner.temp }}/android-sdk
-          PATH: ${{ runner.temp }}/android-sdk/cmdline-tools/latest/bin:${{ runner.temp }}/android-sdk/platform-tools:${{ env.PATH }}
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4    
 
-      - name: Print accepted licenses for debug
-        run: |
-            cat $ANDROID_HOME/licenses/android-sdk-license || true
-            ls -l $ANDROID_HOME/licenses
-        env:
-          ANDROID_HOME: ${{ runner.temp }}/android-sdk
       - name: compile Citron android
         run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
           chmod +x ./citron-android.sh
           JAVA_HOME=$JAVA_HOME_17_X64 ./citron-android.sh
         env:
