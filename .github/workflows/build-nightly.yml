@@ -95,7 +95,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install ccache apksigner wget -y
+          sudo apt-get install ccache apksigner -y wget
           
       - name: Set up Android SDK
         run: |
