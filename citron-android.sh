@@ -2,7 +2,7 @@
 
 export NDK_CCACHE=$(which ccache)
 
-git clone 'https://github.com/pkgforge-community/git.citron-emu.org-Citron-Citron.git' ./citron
+git clone 'https://git.citron-emu.org/Citron/Citron.git' ./citron
 
 if [ ! -z "${ANDROID_KEYSTORE_B64}" ]; then
     export ANDROID_KEYSTORE_FILE="${GITHUB_WORKSPACE}/ks.jks"
@@ -10,10 +10,8 @@ if [ ! -z "${ANDROID_KEYSTORE_B64}" ]; then
 fi
 
 cd ./citron
-git init
-git submodule update --remote --recursive
 git submodule update --init --recursive
-
+find src -type f -name 'build.gradle.kts' -exec sed -i 's/"4\.0\.1"/"3.31.6"/g' {} +
 COUNT="$(git rev-list --count HEAD)"
 HASH="$(git rev-parse --short HEAD)"
 DATE="$(date +"%Y%m%d")"
