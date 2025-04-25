@@ -112,12 +112,12 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4.6.1
         with:
-          name: ${{ env.OS }}-${{ env.TARGET }}
+          name: android-universal
           path: artifacts/
           
   release:
     name: "release"
-    if: ${{ github.ref_name == 'main' }}
+    #if: ${{ github.ref_name == 'main' }}
     needs: [appimage, android]
     permissions:
       actions: read
