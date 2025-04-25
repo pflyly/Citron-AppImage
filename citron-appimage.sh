@@ -15,12 +15,12 @@ case "$1" in
         ;;
     rog)
         echo "Making Citron Optimized Build for ROG Ally X"
-        OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fno-plt -flto=auto -Wno-error'"
+        OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fno-plt -flto=auto -Wno-error""
         TARGET="ROG_Ally_X"
         ;;
     common)
         echo "Making Citron Optimized Build for Modern CPUs"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=x86-64-v3 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS=-march=x86-64-v3 -O3 -pipe -fno-plt -flto=auto -Wno-error""  
+	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=x86-64-v3 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS="-march=x86-64-v3 -O3 -pipe -fno-plt -flto=auto -Wno-error""  
         ARCH="${ARCH}_v3"
         TARGET="Common"
         ;;
