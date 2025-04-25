@@ -17,12 +17,15 @@ APK_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-android-universal"
 
 cd src/android
 chmod +x ./gradlew
-./gradlew assembleRelease --console=plain --info --build-cache --scan --warning-mode=none
-./gradlew bundleRelease
+./gradlew assembleRelease --console=plain --info
 
 if [ ! -z "${ANDROID_KEYSTORE_B64}" ]; then
     rm "${ANDROID_KEYSTORE_FILE}"
 fi
-
+APK_PATH=$(find app/build/outputs/apk -type f -name "*.apk" | head -n 1)
+if [ -z "$APK_PATH" ]; then
+    echo "Error: APK not found in expected directory."
+    exit 1
+fi
 mkdir -p artifacts
-mv app/build/outputs/apk/release/app-release.apk "artifacts/$APK_NAME.apk"
+mv "$APK_PATH" "artifacts/$APK_NAME.apk"
