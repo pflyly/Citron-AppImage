@@ -104,16 +104,12 @@ jobs:
         run: |
           chmod +x ./citron-android.sh
           ./citron-android.sh
-        env:
-          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4.6.1
         with:
           name: android-universal
-          path: artifacts/
+          path: citron/src/android/artifacts/
           
   release:
     name: "release"
