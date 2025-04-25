@@ -98,11 +98,7 @@ jobs:
           sudo apt-get install cmake ccache apksigner -y
           
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: 29
-          ndk: 29.0.13113456
-          cmake: true
+        run: sdkmanager --install "ndk;29.0.13113456" "cmake;4.0.1"
 
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses    
