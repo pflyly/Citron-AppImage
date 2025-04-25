@@ -9,7 +9,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  citron_build: 
+  appimage: 
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -70,11 +70,51 @@ jobs:
           name: hash
           path: ~/hash
           overwrite: true
+  android: 
+    runs-on: ubuntu-latest
+    name: "Citron nightly (android)"
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
+          
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+        
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        
+      - name: Accept Android SDK Licenses
+        run:  |
+          yes | sdkmanager --licenses
+          sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
+
+      - name: compile Citron android
+        run: |
+          chmod +x ./citron-android.sh
+          ./citron-android.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4.6.1
+        with:
+          name: android-universal
+          path: citron/src/android/artifacts/
+          
   release:
     name: "release"
     if: ${{ github.ref_name == 'main' }}
-    needs: [citron_build]
+    needs: [appimage, android]
     permissions:
       actions: read
       security-events: write
@@ -92,6 +132,10 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: citron-common-appimage
+
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          name: android-universal
           
       - uses: actions/download-artifact@v4.1.9
         with:
@@ -114,11 +158,11 @@ jobs:
       - name: Build Releaser
         uses: softprops/action-gh-release@v2
         with:
-          name: "Citron Nightly Appimage: ${{ env.APP_VERSION }}"
+          name: "Citron Nightly Release: ${{ env.APP_VERSION }}"
           tag_name: "${{ env.date }}-${{ env.APP_VERSION }}"
           prerelease: false
           draft: false
           generate_release_notes: false
           make_latest: true
           files: |
-            *.AppImage*
+            *.AppImage*, *.apk
