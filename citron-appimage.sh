@@ -7,7 +7,6 @@ export ARCH="$(uname -m)"
 
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 
-EXTRA_FLAGS=''
 case "$1" in
     steamdeck)
         echo "Making Citron Optimized Build for Steam Deck"
@@ -28,6 +27,7 @@ case "$1" in
     check)
         echo "Checking build"
         ARCH_FLAGS=""
+	TARGET="Checck"
         CCACHE="ccache"
         ;;
 esac
@@ -74,7 +74,7 @@ cmake .. -GNinja \
  	-DCMAKE_BUILD_TYPE=Release \
   	-DCMAKE_C_COMPILER_LAUNCHER="$CCACHE" \
    	-DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE" \
-    	"${OPTIMIZE_FLAGS}"
+    	"$OPTIMIZE_FLAGS"
 
 ninja -j$(nproc)
 echo "$HASH" >~/hash
