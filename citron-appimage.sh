@@ -10,24 +10,24 @@ URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime
 case "$1" in
     steamdeck)
         echo "Making Citron Optimized Build for Steam Deck"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS="-march=znver2 -mtune=znver2 -O3 -pipe -fno-plt -flto=auto -Wno-error""
+        OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS=-Wl,-O3\ -Wl,--as-needed -DCMAKE_CXX_FLAGS=-march=znver2\ -mtune=znver2\ -O3\ -pipe\ -fno-plt\ -flto=auto\ -Wno-error\ -mfpmath=both -DCMAKE_C_FLAGS=-march=znver2\ -mtune=znver2\ -O3\ -pipe\ -fno-plt\ -flto=auto\ -Wno-error"
         TARGET="Steamdeck"
         ;;
     rog)
         echo "Making Citron Optimized Build for ROG Ally X"
-        OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fno-plt -flto=auto -Wno-error""
+        OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS=-Wl,-O3\ -Wl,--as-needed -DCMAKE_CXX_FLAGS=-march=znver4\ -mtune=znver4\ -O3\ -pipe\ -fno-plt\ -flto=auto\ -Wno-error\ -mfpmath=both -DCMAKE_C_FLAGS=-march=znver4\ -mtune=znver4\ -O3\ -pipe\ -fno-plt\ -flto=auto\ -Wno-error"
         TARGET="ROG_Ally_X"
         ;;
     common)
         echo "Making Citron Optimized Build for Modern CPUs"
-	OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS="-Wl,-O3 -Wl,--as-needed" -DCMAKE_CXX_FLAGS="-march=x86-64-v3 -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both" -DCMAKE_C_FLAGS="-march=x86-64-v3 -O3 -pipe -fno-plt -flto=auto -Wno-error""  
+        OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS=-Wl,-O3\ -Wl,--as-needed -DCMAKE_CXX_FLAGS=-march=x86-64-v3\ -O3\ -pipe\ -fno-plt\ -flto=auto\ -Wno-error\ -mfpmath=both -DCMAKE_C_FLAGS=-march=x86-64-v3\ -O3\ -pipe\ -fno-plt\ -flto=auto\ -Wno-error"
         ARCH="${ARCH}_v3"
         TARGET="Common"
         ;;
     check)
         echo "Checking build"
         OPTIMIZE_FLAGS="-DCITRON_USE_PRECOMPILED_HEADERS=OFF"
-	TARGET="Checck"
+        TARGET="Checck"
         CCACHE="ccache"
         ;;
 esac
@@ -68,7 +68,6 @@ cmake .. -GNinja \
   	-DCMAKE_C_COMPILER_LAUNCHER="$CCACHE" \
    	-DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE" \
     	"$OPTIMIZE_FLAGS"
-
 ninja -j$(nproc)
 echo "$HASH" >~/hash
 echo "$(cat ~/hash)"
