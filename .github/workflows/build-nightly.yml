@@ -92,32 +92,23 @@ jobs:
           key: ${{ runner.os }}-android-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-android-
-      - name: Set tag name
-        run: |
-          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-              echo "GIT_TAG_NAME=$GITHUB_REF_NAME" >> $GITHUB_ENV
-          fi
-          echo $GIT_TAG_NAME
-      - name: Deps
+      - name: Install dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install ccache apksigner -y
-      - name: Build
-        run: JAVA_HOME=$JAVA_HOME_17_X64 ./.ci/android.sh
+      - name: compile Citron android
+        run: JAVA_HOME=$JAVA_HOME_17_X64 ./citron-android.sh
         env:
           ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
-      - name: Pack
-        run: ../../../.ci/pack.sh
-        working-directory: src/android/app
-        env:
-          UNPACKED: 1
-      - name: Upload
-        uses: actions/upload-artifact@v4
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v@v4.6.1
         with:
           name: ${{ env.OS }}-${{ env.TARGET }}
           path: src/android/app/artifacts/
+          
   release:
     name: "release"
     if: ${{ github.ref_name == 'main' }}
@@ -139,6 +130,10 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: citron-common-appimage
+
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          name: android-universal
           
       - uses: actions/download-artifact@v4.1.9
         with:
@@ -161,11 +156,11 @@ jobs:
       - name: Build Releaser
         uses: softprops/action-gh-release@v2
         with:
-          name: "Citron Nightly Appimage: ${{ env.APP_VERSION }}"
+          name: "Citron Nightly Release: ${{ env.APP_VERSION }}"
           tag_name: "${{ env.date }}-${{ env.APP_VERSION }}"
           prerelease: false
           draft: false
           generate_release_notes: false
           make_latest: true
           files: |
-            *.AppImage*
+            *.AppImage*, *.apk
