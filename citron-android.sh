@@ -1,7 +1,5 @@
 #!/bin/bash -ex
 
-export NDK_CCACHE=$(which ccache)
-
 git clone 'https://git.citron-emu.org/Citron/Citron.git' ./citron
 
 if [ ! -z "${ANDROID_KEYSTORE_B64}" ]; then
@@ -19,13 +17,12 @@ APK_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-android-universal"
 
 cd src/android
 chmod +x ./gradlew
-./gradlew assembleRelease
+./gradlew assembleRelease --console=plain --info --build-cache --scan --warning-mode=none
 ./gradlew bundleRelease
-ccache -s -v
 
 if [ ! -z "${ANDROID_KEYSTORE_B64}" ]; then
     rm "${ANDROID_KEYSTORE_FILE}"
 fi
 
 mkdir -p artifacts
-mv build/bundle/app-release.apk "artifacts/$APK_NAME.apk"
+mv app/build/outputs/apk/release/app-release.apk "artifacts/$APK_NAME.apk"
