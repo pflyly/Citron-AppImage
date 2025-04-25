@@ -17,7 +17,7 @@ cd ./citron
 COUNT="$(git rev-list --count HEAD)"
 HASH="$(git rev-parse --short HEAD)"
 DATE="$(date +"%Y%m%d")"
-APK_NAME="Citron-nightly-"${DATE}"-"${COUNT}"-"${HASH}"-android-universal
+APK_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-android-universal"
 git submodule update --init --recursive -j$(nproc)
 
 cd src/android
