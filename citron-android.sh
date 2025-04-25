@@ -22,7 +22,7 @@ git submodule update --init --recursive -j$(nproc)
 
 cd src/android
 chmod +x ./gradlew
-./gradlew assemble
+./gradlew assembleRelease
 ./gradlew bundleRelease
 ccache -s -v
 
