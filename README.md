@@ -13,7 +13,7 @@
 This repository makes AppImage with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
 
 > [!IMPORTANT]
-> **Now added APK release**
+> **Now added APK release!!**
 
 * [Latest Optimized Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
