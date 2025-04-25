@@ -9,7 +9,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  citron_build: 
+  appimage: 
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -70,11 +70,58 @@ jobs:
           name: hash
           path: ~/hash
           overwrite: true
-
+  android: 
+    runs-on: ubuntu-latest
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_COMPILERCHECK: content
+      CCACHE_SLOPPINESS: time_macros
+      OS: android
+      TARGET: universal
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up cache for android
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ${{ env.CCACHE_DIR }}
+          key: ${{ runner.os }}-android-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-android-
+      - name: Set tag name
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+              echo "GIT_TAG_NAME=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          fi
+          echo $GIT_TAG_NAME
+      - name: Deps
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install ccache apksigner -y
+      - name: Build
+        run: JAVA_HOME=$JAVA_HOME_17_X64 ./.ci/android.sh
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+      - name: Pack
+        run: ../../../.ci/pack.sh
+        working-directory: src/android/app
+        env:
+          UNPACKED: 1
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.OS }}-${{ env.TARGET }}
+          path: src/android/app/artifacts/
   release:
     name: "release"
     if: ${{ github.ref_name == 'main' }}
-    needs: [citron_build]
+    needs: [appimage, android]
     permissions:
       actions: read
       security-events: write
