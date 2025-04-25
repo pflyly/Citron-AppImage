@@ -12,7 +12,7 @@ APK_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-android-universal"
 
 cd src/android
 chmod +x ./gradlew
-./gradlew assembleRelease --console=plain --info --configuration-cache
+./gradlew assembleRelease --console=plain --info
 
 APK_PATH=$(find app/build/outputs/apk -type f -name "*.apk" | head -n 1)
 if [ -z "$APK_PATH" ]; then
