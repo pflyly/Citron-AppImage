@@ -7,8 +7,7 @@ export ARCH="$(uname -m)"
 
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 
-EXTRA_FLAGS='-O3 -pipe -fno-plt -flto=auto -Wno-error'
-COMMON_OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS='-Wl,-O3 -Wl,--as-needed'"
+EXTRA_FLAGS=''
 case "$1" in
     steamdeck)
         echo "Making Citron Optimized Build for Steam Deck"
@@ -34,9 +33,7 @@ case "$1" in
 esac
 
 if [ "$1" != "check" ]; then
-    CXX_FLAGS="${ARCH_FLAGS} ${EXTRA_FLAGS} -mfpmath=both"
-    C_FLAGS="${ARCH_FLAGS} ${EXTRA_FLAGS}"
-    OPTIMIZE_FLAGS="${COMMON_OPTIMIZE_FLAGS} -DCMAKE_CXX_FLAGS='${CXX_FLAGS}' -DCMAKE_C_FLAGS='${C_FLAGS}'"
+    OPTIMIZE_FLAGS="-DCITRON_ENABLE_LTO=ON -DCMAKE_EXE_LINKER_FLAGS='-Wl,-O3 -Wl,--as-needed' -DCMAKE_CXX_FLAGS='${ARCH_FLAGS} -O3 -pipe -fno-plt -flto=auto -Wno-error -mfpmath=both' -DCMAKE_C_FLAGS='${ARCH_FLAGS} -O3 -pipe -fno-plt -flto=auto -Wno-error'"
 else
     OPTIMIZE_FLAGS="-DCITRON_USE_PRECOMPILED_HEADERS=OFF"
 fi
@@ -77,7 +74,7 @@ cmake .. -GNinja \
  	-DCMAKE_BUILD_TYPE=Release \
   	-DCMAKE_C_COMPILER_LAUNCHER="$CCACHE" \
    	-DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE" \
-    	${OPTIMIZE_FLAGS}
+    	"${OPTIMIZE_FLAGS}"
 
 ninja -j$(nproc)
 echo "$HASH" >~/hash
