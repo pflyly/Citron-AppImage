@@ -96,7 +96,9 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install ccache apksigner -y
       - name: compile Citron android
-        run: JAVA_HOME=$JAVA_HOME_17_X64 ./citron-android.sh
+        run: |
+          chmod +x ./citron-android.sh
+          JAVA_HOME=$JAVA_HOME_17_X64 ./citron-android.sh
         env:
           ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
