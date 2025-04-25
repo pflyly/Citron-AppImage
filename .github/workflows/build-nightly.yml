@@ -101,12 +101,13 @@ jobs:
         uses: android-actions/setup-android@v2
         with:
            api-level: 35
-           ndk: 27.2.12479018
-           cmake: true
+           ndk: "29.0.13113456"
+           cmake: "4.0.1"
          
       - name: Accept Android SDK Licenses
         run: yes | sdkmanager --licenses
-                
+      - name: Install additional dependencies
+        run: sdkmanager --install "ndk;29.0.13113456" "cmake;4.0.1"                
       - name: compile Citron android
         run: |
           chmod +x ./citron-android.sh
