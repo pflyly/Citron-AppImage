@@ -101,14 +101,19 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+      - name: Accept Android SDK Licenses
+        run:  |
+          yes | sdkmanager --licenses
+          sdkmanager "ndk;29.0.13113456
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Accept Android SDK Licenses
-        run: yes | sdkmanager --licenses
+
       - name: compile Citron android
         run: |
           chmod +x ./citron-android.sh
-          JAVA_HOME=$JAVA_HOME_17_X64 ./citron-android.sh
+          ./citron-android.sh
         env:
           ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
