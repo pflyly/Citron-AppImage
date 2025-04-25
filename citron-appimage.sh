@@ -77,7 +77,7 @@ cmake .. -GNinja \
  	-DCMAKE_BUILD_TYPE=Release \
   	-DCMAKE_C_COMPILER_LAUNCHER="$CCACHE" \
    	-DCMAKE_CXX_COMPILER_LAUNCHER="$CCACHE" \
-    	"${OPTIMIZE_FLAGS}"
+    	${OPTIMIZE_FLAGS}
 
 ninja -j$(nproc)
 echo "$HASH" >~/hash
