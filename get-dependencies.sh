@@ -24,6 +24,7 @@ pacman -Syu --noconfirm \
 	catch2 \
 	clang \
 	cmake \
+ 	ccache \
 	curl \
 	dav1d \
 	desktop-file-utils \
@@ -42,6 +43,7 @@ pacman -Syu --noconfirm \
 	libdecor \
 	libfdk-aac \
 	libopusenc \
+ 	libtheora \
 	libva \
 	libvpx \
 	libxi \

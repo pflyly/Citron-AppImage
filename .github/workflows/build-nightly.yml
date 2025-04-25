@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [steamdeck, rog, common]
+        target: [steamdeck, rog, common, check]
     container: ghcr.io/pkgforge-dev/archlinux:latest
     name: "Citron nightly (${{ matrix.target }})"
     steps:
@@ -25,16 +25,27 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /github/home/.cache/vcpkg/archives
-          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+          key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
-            ${{ runner.os }}-vcpkg-
+            ${{ runner.os }}-${{ matrix.target }}-vcpkg-
 
+      - name: set up ccache for check
+        if: ${{ matrix.target == 'check' }}
+        uses: actions/cache@v4
+        with:
+          path: /github/home/.ccache
+          key: ${{ runner.os }}-ccache-check-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-check-
+            
       - name: Install dependencies
         run: |
           chmod +x ./get-dependencies.sh
           ./get-dependencies.sh
           
       - name: compile Citron ${{ matrix.target }}
+        env:
+          CCACHE_DIR: /github/home/.ccache
         run: |
           chmod +x ./citron-appimage.sh
           ./citron-appimage.sh ${{ matrix.target }}
