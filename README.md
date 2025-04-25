@@ -2,7 +2,7 @@
   <br>
   <a href="https://citron-emu.org"><img src="https://git.citron-emu.org/Citron/Citron/raw/branch/master/dist/citron.ico" width="200"></a>
   <br>
-  <b>Citron-Optimized-AppImage</b>
+  <b>Citron Optimized AppImage & APK</b>
   <br>
 </h1>
 
@@ -10,7 +10,10 @@
 [![GitHub Downloads](https://img.shields.io/github/downloads/pflyly/Citron-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pflyly/Citron-AppImage/releases/latest)
 [![CI Build Status](https://github.com//pflyly/Citron-AppImage/actions/workflows/build-nightly.yml/badge.svg)](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
-This repository makes builds with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
+This repository makes AppImage with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
+
+> [!IMPORTANT]
+> **Now added APK release**
 
 * [Latest Optimized Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
