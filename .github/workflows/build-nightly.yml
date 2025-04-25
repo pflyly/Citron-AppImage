@@ -95,7 +95,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install ccache apksigner -y
+          sudo apt-get install cmake ccache apksigner -y
           
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
