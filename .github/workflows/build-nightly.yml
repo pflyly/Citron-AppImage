@@ -91,6 +91,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: false
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
         
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
