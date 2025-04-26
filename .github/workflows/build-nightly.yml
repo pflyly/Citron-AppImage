@@ -169,7 +169,7 @@ jobs:
           pacboy: >-
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
             qt6-base:p qt6-multimedia:p qt6-multimedia-wmf:p qt6-tools:p qt6-translations:p
-            boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p
+            boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p autoconf:p
             opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p
             
       - name: Install extra tools (MSYS2)
