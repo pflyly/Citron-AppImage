@@ -122,20 +122,17 @@ jobs:
         shell: ${{ (matrix.target == 'msys2' && 'msys2') || 'bash' }} {0}
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
-      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache
       CCACHE_COMPILERCHECK: content
       CCACHE_SLOPPINESS: time_macros
       OS: windows
       TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
-      - name: Ensure vcpkg cache directory exists
-        run: mkdir -p "${{ github.workspace }}/vcpkg_cache"
         
       - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
-          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
           key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
