@@ -129,7 +129,9 @@ jobs:
       TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
-      
+      - name: Ensure vcpkg cache directory exists
+        run: mkdir -p "${{ github.workspace }}/vcpkg_cache"
+        
       - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
