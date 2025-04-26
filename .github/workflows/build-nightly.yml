@@ -161,6 +161,7 @@ jobs:
           pacboy: >-
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p
             qt6-base:p qt6-multimedia:p qt6-multimedia-wmf:p qt6-tools:p qt6-translations:p
+            boost:p boost-build:p
             
       - name: Install extra tools (MSYS2)
         if: ${{ matrix.target == 'msys2' }}
