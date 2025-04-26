@@ -169,8 +169,8 @@ jobs:
           pacboy: >-
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
             qt6-base:p qt6-multimedia:p qt6-multimedia-wmf:p qt6-tools:p qt6-translations:p
-            boost:p nlohmann_json:p openssl:p ffmpeg:p base-devel:p catch2:p fmt:p mbedtls:p
-            opus:p qt5:p sdl2:p zlib:p zstd:p zip:p unzip:p qt6-webengine:p sdl3:p fuse2:p rapidjson:p
+            boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p
+            opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p
             
       - name: Install extra tools (MSYS2)
         if: ${{ matrix.target == 'msys2' }}
