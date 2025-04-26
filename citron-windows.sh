@@ -12,11 +12,11 @@ DATE="$(date +"%Y%m%d")"
 case "$1" in
     msvc)
         echo "Making Citron for Windows (MSVC)"
-        TARGET="Windows_MSVC"
+        TARGET="Windows-MSVC"
         ;;
     msys2)
         echo "Making Citron for Windows (MSYS2)"
-        TARGET="Windows_MSYS2"
+        TARGET="Windows-MSYS2"
         ;;
 esac
 EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-${TARGET}"
@@ -40,8 +40,7 @@ ccache -s -v
 mkdir -p artifacts
 mkdir "$EXE_NAME"
 EXE_PATH=$(find ./ -type f -name "*.exe" | head -n 1)
-mv "$EXE_PATH"/* "$REV_NAME"
-ZIP_NAME="$REV_NAME"
-
-
-
+mv bundle/* "$REV_NAME"
+ZIP_NAME="$REV_NAME.zip"
+powershell Compress-Archive "$REV_NAME" "$ZIP_NAME"
+mv "$ZIP_NAME" artifacts/
