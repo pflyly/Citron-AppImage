@@ -16,6 +16,7 @@ case "$1" in
         ;;
     msys2)
         echo "Making Citron for Windows (MSYS2)"
+        export ACLOCAL_PATH="/usr/share/aclocal"
         TARGET="Windows-MSYS2"
         ;;
 esac
