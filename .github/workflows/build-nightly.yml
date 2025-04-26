@@ -70,6 +70,7 @@ jobs:
           name: hash
           path: ~/hash
           overwrite: true
+          
   android: 
     runs-on: ubuntu-latest
     name: "Citron nightly (android)"
@@ -115,10 +116,10 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        target: ["msvc_optimize", "msvc-check", "msys2_optimize", "msys2-check"]
+        target: ["msvc", "msys2"]
     defaults:
       run:
-        shell: ${{ (matrix.target == 'msys2_optimize' && 'msys2') || 'bash' }} {0}
+        shell: ${{ (matrix.target == 'msys2' && 'msys2') || 'bash' }} {0}
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_COMPILERCHECK: content
@@ -127,8 +128,7 @@ jobs:
       TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
       - name: Set up cache
         uses: actions/cache@v4
         with:
@@ -136,17 +136,21 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-
+            
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
         uses: ilammy/msvc-dev-cmd@v1
+        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
         run: choco install ccache ninja ptime wget
+        
       - name: Install vulkan-sdk (MSVC)
         if: ${{ matrix.target == 'msvc' }}
         run: |
-          wget https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe -O D:/a/_temp/vulkan.exe
+          wget https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
           D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
+          
       - name: Set up MSYS2
         if: ${{ matrix.target == 'msys2' }}
         uses: msys2/setup-msys2@v2
@@ -157,39 +161,30 @@ jobs:
           pacboy: >-
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p
             qt6-base:p qt6-multimedia:p qt6-multimedia-wmf:p qt6-tools:p qt6-translations:p
+            
       - name: Install extra tools (MSYS2)
         if: ${{ matrix.target == 'msys2' }}
         uses: crazy-max/ghaction-chocolatey@v3
         with:
           args: install ptime wget
-      - name: Install NSIS
-        if: ${{ github.ref_type == 'tag' }}
-        run: |
-          wget https://download.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11-setup.exe -O D:/a/_temp/nsis-setup.exe
-          ptime D:/a/_temp/nsis-setup.exe /S
-        shell: pwsh
+          
       - name: Disable line ending translation
         run: git config --global core.autocrlf input
-      - name: Build
-        run: ./.ci/windows.sh
-      - name: Generate installer
-        if: ${{ github.ref_type == 'tag' }}
+        
+      - name: compile Citron ${{ matrix.target }}
         run: |
-          cd src\installer
-          "C:\Program Files (x86)\NSIS\makensis.exe" /DPRODUCT_VARIANT=${{ matrix.target }} /DPRODUCT_VERSION=${{ github.ref_name }} citra.nsi
-          mkdir ..\..\artifacts 2> NUL
-          move /y *.exe ..\..\artifacts\
-        shell: cmd
-      - name: Pack
-        run: ./.ci/pack.sh
+          chmod +x ./citron-windows.sh
+          ./citron-windows.sh ${{ matrix.target }}
+          
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.OS }}-${{ env.TARGET }}
-          path: artifacts/          
+          name: ${{ env.OS }}-${{ matrix.target }}
+          path: artifacts/
+          
   release:
     name: "release"
-    if: ${{ github.ref_name == 'main' }}
+    #if: ${{ github.ref_name == 'main' }}
     needs: [appimage, android, windows]
     permissions:
       actions: read
@@ -212,6 +207,12 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: android-universal
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          name: windows-msvc
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          name: windows-msys2          
           
       - uses: actions/download-artifact@v4.1.9
         with:
@@ -241,4 +242,4 @@ jobs:
           generate_release_notes: false
           make_latest: true
           files: |
-            *.AppImage*, *.apk
+            *.AppImage*, *.apk, *.zip
