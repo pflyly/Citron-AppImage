@@ -31,7 +31,8 @@ cmake .. -G Ninja \
     -DUSE_DISCORD_PRESENCE=OFF \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
 ninja bundle
 strip -s bundle/*.exe
