@@ -21,7 +21,7 @@ jobs:
         with:
           persist-credentials: false
           
-      - name: Cache vcpkg dependencies
+      - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
           path: /github/home/.cache/vcpkg/archives
@@ -29,7 +29,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
 
-      - name: set up ccache for check
+      - name: Set up ccache for check
         if: ${{ matrix.target == 'check' }}
         uses: actions/cache@v4
         with:
@@ -43,7 +43,7 @@ jobs:
           chmod +x ./get-dependencies.sh
           ./get-dependencies.sh
           
-      - name: compile Citron ${{ matrix.target }}
+      - name: Compile Citron ${{ matrix.target }}
         env:
           CCACHE_DIR: /github/home/.ccache
         run: |
@@ -101,7 +101,7 @@ jobs:
           yes | sdkmanager --licenses
           sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
 
-      - name: compile Citron android
+      - name: Compile Citron android
         run: |
           chmod +x ./citron-android.sh
           ./citron-android.sh
@@ -122,14 +122,23 @@ jobs:
         shell: ${{ (matrix.target == 'msys2' && 'msys2') || 'bash' }} {0}
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg_cache
       CCACHE_COMPILERCHECK: content
       CCACHE_SLOPPINESS: time_macros
       OS: windows
       TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Set up cache for vcpkg
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.target }}-vcpkg-
 
-      - name: Set up cache
+      - name: Set up cache for build
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -172,7 +181,7 @@ jobs:
       - name: Disable line ending translation
         run: git config --global core.autocrlf input
         
-      - name: compile Citron ${{ matrix.target }}
+      - name: Compile Citron ${{ matrix.target }}
         run: |
           chmod +x ./citron-windows.sh
           ./citron-windows.sh ${{ matrix.target }}
