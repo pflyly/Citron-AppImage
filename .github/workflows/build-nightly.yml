@@ -163,7 +163,7 @@ jobs:
         if: ${{ matrix.target == 'msys2' }}
         uses: msys2/setup-msys2@v2
         with:
-          msystem: clang64
+          msystem: MINGW64
           update: true
           install: git make p7zip autoconf base-devel zip unzip
           pacboy: >-
