@@ -115,6 +115,7 @@ jobs:
   windows:
     runs-on: windows-latest
     strategy:
+      fail-fast: false
       matrix:
         target: ["msvc", "msys2"]
     defaults:
@@ -170,7 +171,6 @@ jobs:
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
             qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
             opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p libtool:p python-pip:p
-            autoconf:p autoconf-archive:p
             
       - name: Install extra tools (MSYS2)
         if: ${{ matrix.target == 'msys2' }}
