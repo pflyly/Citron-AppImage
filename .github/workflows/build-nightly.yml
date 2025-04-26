@@ -180,11 +180,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.OS }}-${{ matrix.target }}
-          path: artifacts/
+          path: citron/build/artifacts/
           
   release:
     name: "release"
-    #if: ${{ github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'main' }}
     needs: [appimage, android, windows]
     permissions:
       actions: read
