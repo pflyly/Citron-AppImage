@@ -151,10 +151,13 @@ jobs:
         if: ${{ matrix.target == 'msvc' }}
         uses: jurplel/install-qt-action@v3
         with:
-          version: 6.8.2
+          version: 6.7.1
           host: windows
           target: desktop
           cache: true
+      - name: List available Qt versions
+        if: ${{ matrix.target == 'msvc' }}
+        run: aqt list-qt windows desktop --arch x86_64 
         
       - name: Install vulkan-sdk (MSVC)
         if: ${{ matrix.target == 'msvc' }}
