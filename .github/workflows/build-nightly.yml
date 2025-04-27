@@ -159,11 +159,11 @@ jobs:
         
       - name: Install vulkan-sdk (MSVC)
         if: ${{ matrix.target == 'msvc' }}
-        uses: humbletim/setup-vulkan-sdk@v1.2.1
-        with:
-         vulkan-query-version: latest
-         vulkan-components: Vulkan-Headers, Vulkan-Loader, Glslang, SPIRV-Tools, SPIRV-Headers
-         vulkan-use-cache: true
+        run: |
+           wget https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
+           D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
+           echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
+           echo "PATH=C:/VulkanSDK/1.4.309.0/Bin;%PATH%" >> $GITHUB_ENV
           
       - name: Set up MSYS2
         if: ${{ matrix.target == 'msys2' }}
