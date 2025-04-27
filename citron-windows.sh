@@ -65,9 +65,7 @@ cmake .. -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER_LAUNCHER=sccache \
     -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
-    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-    "-DCMAKE_CXX_FLAGS=/FS /W3 /WX-" \
-    "-DCMAKE_C_FLAGS=/FS /W3 /WX-"
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
 sccache -s
 
