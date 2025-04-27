@@ -44,6 +44,11 @@ case "$1" in
         ;;
     msys2)
         echo "Making Citron for Windows (MSYS2)"
+        echo "Setting environment for MSYS2"
+        export SHELL=/usr/bin/bash
+        export CONFIG_SHELL=/usr/bin/bash
+        export MSYSTEM=MINGW64
+        export PATH=/usr/bin:$PATH
         TARGET="Windows-MSYS2"
         EXTRA_CXX_FLAGS=""
         ;;
