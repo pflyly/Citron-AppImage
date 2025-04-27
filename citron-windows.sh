@@ -44,6 +44,7 @@ case "$1" in
         fi
         echo "PATH is: $PATH"
         TARGET="Windows-MSVC"
+        CMAKE_EXTRA_FLAGS="-DCMAKE_C_FLAGS='/W3 /WX-' -DCMAKE_CXX_FLAGS='/W3 /WX-'"
         ;;
     msys2)
         echo "Making Citron for Windows (MSYS2)"
@@ -51,6 +52,7 @@ case "$1" in
         sed -i '1s;^;#!/usr/bin/bash\n;' externals/libusb/libusb/bootstrap.sh
         chmod +x externals/libusb/libusb/bootstrap.sh
         TARGET="Windows-MSYS2"
+        CMAKE_EXTRA_FLAGS=""
         ;;
 esac
 EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-${TARGET}"
@@ -65,20 +67,17 @@ cmake .. -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER_LAUNCHER=ccache \
     -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    $CMAKE_EXTRA_FLAGS
 ninja
 ccache -s -v
 
 # Use windeployqt to gather dependencies
-EXE_PATH=$(find ./ -type f -name "*.exe" | head -n 1)
-if [ ! -f "$EXE_PATH" ]; then
-    echo "Error: .exe not found!"
-    exit 1
-fi
+EXE_PATH=./bin/citron.exe
 mkdir deploy
 cp "$EXE_PATH" deploy/
 WINDEPLOYQT_BIN=$(find_windeployqt)
-"$WINDEPLOYQT_BIN" --no-compiler-runtime --release --dir deploy "$EXE_PATH"
+"$WINDEPLOYQT_BIN" --release --dir deploy "$EXE_PATH"
 
 if [ "$1" = "msys2" ]; then
     if command -v strip >/dev/null 2>&1; then
