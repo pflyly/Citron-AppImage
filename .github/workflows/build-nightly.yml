@@ -135,9 +135,9 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
-
-      - name: Set up sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+            
+      - name: Set up cache for build
+        uses: hendrikmuhs/ccache-action@v1.2
             
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
@@ -145,7 +145,7 @@ jobs:
        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
-        run: choco install cmake ninja wget zip -y
+        run: choco install cmake ccache ninja wget zip -y
         
       - name: Install Qt (MSVC)
         if: ${{ matrix.target == 'msvc' }}
