@@ -44,11 +44,9 @@ case "$1" in
         ;;
     msys2)
         echo "Making Citron for Windows (MSYS2)"
-        echo "Setting environment for MSYS2"
-        export SHELL=/usr/bin/bash
-        export CONFIG_SHELL=/usr/bin/bash
-        export MSYSTEM=MINGW64
-        export PATH=/usr/bin:$PATH
+        echo "Patching bootstrap.sh to add shebang"
+        sed -i '1s;^;#!/usr/bin/bash\n;' externals/libusb/libusb/bootstrap.sh
+        chmod +x externals/libusb/libusb/bootstrap.sh
         TARGET="Windows-MSYS2"
         EXTRA_CXX_FLAGS=""
         ;;
