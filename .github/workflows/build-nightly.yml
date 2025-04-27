@@ -159,11 +159,11 @@ jobs:
       - name: Install vulkan-sdk (MSVC)
         if: ${{ matrix.target == 'msvc' }}
         run: |
-          mkdir -p D:/a/_temp/vulkan
-          curl -L -o D:/a/_temp/vulkan.zip https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0.zip?Human=true
-          7z x D:/a/_temp/vulkan.zip -oD:/a/_temp/vulkan
-          echo "VULKAN_SDK=D:/a/_temp/vulkan/1.4.309.0" >> $GITHUB_ENV
-          echo "PATH=D:/a/_temp/vulkan/1.4.309.0/Bin;%PATH%" >> $GITHUB_ENV
+           mkdir -p D:/a/_temp/vulkan
+           curl -L -o D:/a/_temp/vulkan/VulkanSDKInstaller.exe https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe
+           D:/a/_temp/vulkan/VulkanSDKInstaller.exe /S
+           echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
+           echo "PATH=C:/VulkanSDK/1.4.309.0/Bin;%PATH%" >> $GITHUB_ENV
           
       - name: Set up MSYS2
         if: ${{ matrix.target == 'msys2' }}
