@@ -24,6 +24,7 @@ EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-${TARGET}"
 mkdir build
 cd build
 cmake .. -G Ninja \
+    -DCITRON_USE_BUNDLED_VCPKG=ON \
     -DCITRON_TESTS=OFF \
     -DCITRON_USE_PRECOMPILED_HEADERS=OFF \
     -DENABLE_QT_TRANSLATION=ON \
