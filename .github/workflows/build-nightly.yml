@@ -141,7 +141,9 @@ jobs:
             
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
-        uses: ilammy/msvc-dev-cmd@v1 
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          toolset: 14.3
        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
@@ -152,6 +154,9 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: 6.8.2
+          host: windows
+          target: desktop
+          cache: true
         
       - name: Install vulkan-sdk (MSVC)
         if: ${{ matrix.target == 'msvc' }}
