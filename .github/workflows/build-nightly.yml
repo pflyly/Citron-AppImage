@@ -166,7 +166,7 @@ jobs:
         with:
           msystem: MINGW64
           update: true
-          install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake gettext intltool
+          install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
           pacboy: >-
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
             qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
