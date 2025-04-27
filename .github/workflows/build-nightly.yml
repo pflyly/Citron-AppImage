@@ -184,14 +184,6 @@ jobs:
             pacman -Sy --noconfirm
             pacman -S --noconfirm automake
             ls /usr/share/aclocal/progtest.m4 || (echo "progtest.m4 still missing!" && exit 1)
-            
-      - name: Prepare MSYS2 environment
-        if: ${{ matrix.target == 'msys2' }}
-        shell: msys2 {0}
-        run: |
-            echo "MSYSTEM=MINGW64" >> $GITHUB_ENV
-            echo "CHERE_INVOKING=1" >> $GITHUB_ENV
-            echo "SHELL=/usr/bin/bash" >> $GITHUB_ENV
           
       - name: Disable line ending translation
         run: git config --global core.autocrlf input
