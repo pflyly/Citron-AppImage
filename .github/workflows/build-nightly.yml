@@ -141,9 +141,8 @@ jobs:
             
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          toolset: 14.3
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
@@ -172,12 +171,12 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
-          update: true
-          install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
+          update: false
+          install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake && pacman -Sy && pacman -S --noconfirm automake
           pacboy: >-
             toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
             qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
-            opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p python-pip:p automake:p
+            opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p python-pip:p
           
       - name: Disable line ending translation
         run: git config --global core.autocrlf input
