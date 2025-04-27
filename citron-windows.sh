@@ -44,7 +44,6 @@ case "$1" in
         fi
         echo "PATH is: $PATH"
         TARGET="Windows-MSVC"
-        CMAKE_EXTRA_FLAGS="-DCMAKE_C_FLAGS='/W3 /WX-' -DCMAKE_CXX_FLAGS='/W3 /WX-'"
         ;;
     msys2)
         echo "Making Citron for Windows (MSYS2)"
@@ -52,7 +51,6 @@ case "$1" in
         sed -i '1s;^;#!/usr/bin/bash\n;' externals/libusb/libusb/bootstrap.sh
         chmod +x externals/libusb/libusb/bootstrap.sh
         TARGET="Windows-MSYS2"
-        CMAKE_EXTRA_FLAGS=""
         ;;
 esac
 EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-${TARGET}"
@@ -67,8 +65,7 @@ cmake .. -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER_LAUNCHER=sccache \
     -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
-    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-    $CMAKE_EXTRA_FLAGS
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
 sccache -s
 
