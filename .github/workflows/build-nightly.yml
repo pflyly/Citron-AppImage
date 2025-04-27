@@ -118,9 +118,6 @@ jobs:
       fail-fast: false
       matrix:
         target: ["msvc", "msys2"]
-    defaults:
-      run:
-        shell: ${{ (matrix.target == 'msys2' && 'msys2') || 'bash' }} {0}
     env:
       OS: windows
       TARGET: ${{ matrix.target }}
@@ -192,6 +189,7 @@ jobs:
         run: git config --global core.autocrlf input
         
       - name: Compile Citron ${{ matrix.target }}
+        shell: ${{ matrix.target == 'msys2' && 'msys2 {0}' || 'bash' }}
         run: |
           chmod +x ./citron-windows.sh
           ./citron-windows.sh ${{ matrix.target }}
