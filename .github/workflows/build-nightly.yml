@@ -122,9 +122,6 @@ jobs:
       run:
         shell: ${{ (matrix.target == 'msys2' && 'msys2') || 'bash' }} {0}
     env:
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CCACHE_COMPILERCHECK: content
-      CCACHE_SLOPPINESS: time_macros
       OS: windows
       TARGET: ${{ matrix.target }}
     steps:
@@ -139,12 +136,7 @@ jobs:
             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
 
       - name: Set up cache for build
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-${{ matrix.target }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.target }}-
+        uses: hendrikmuhs/ccache-action@v1.2
             
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
