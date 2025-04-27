@@ -39,7 +39,9 @@ DATE="$(date +"%Y%m%d")"
 case "$1" in
     msvc)
         echo "Making Citron for Windows (MSVC)"
-        export PATH="$PATH:/c/ProgramData/chocolatey/bin"
+        if ! echo "$PATH" | grep -q "/c/ProgramData/chocolatey/bin"; then
+            export PATH="$PATH:/c/ProgramData/chocolatey/bin"
+        fi
         echo "PATH is: $PATH"
         TARGET="Windows-MSVC"
         EXTRA_CXX_FLAGS="/MP"
