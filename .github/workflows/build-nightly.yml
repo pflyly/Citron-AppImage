@@ -145,7 +145,7 @@ jobs:
        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
-        run: choco install ccache ninja wget zip -y
+        run: choco install cmake ccache ninja wget zip -y
         
       - name: Install Qt (MSVC)
         if: ${{ matrix.target == 'msvc' }}
