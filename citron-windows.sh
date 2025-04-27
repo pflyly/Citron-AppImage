@@ -63,11 +63,11 @@ cmake .. -G Ninja \
     -DENABLE_QT_TRANSLATION=ON \
     -DUSE_DISCORD_PRESENCE=OFF \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_COMPILER_LAUNCHER=sccache \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
-sccache -s
+ccache -s -v
 
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/citron.exe
