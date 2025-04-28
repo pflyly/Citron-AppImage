@@ -59,7 +59,8 @@ mkdir build
 cd build
 cmake .. -G Ninja \
     -DCITRON_TESTS=OFF \
-    -DCITRON_USE_PRECOMPILED_HEADERS=OFF \
+    -DCITRON_USE_BUNDLED_QT=OFF \
+    -DUSE_SYSTEM_QT=ON \
     -DENABLE_QT_TRANSLATION=ON \
     -DUSE_DISCORD_PRESENCE=OFF \
     -DCMAKE_BUILD_TYPE=Release \
@@ -72,9 +73,9 @@ ccache -s -v
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/citron.exe
 mkdir deploy
-cp "$EXE_PATH" deploy/
+cp -r ./bin deploy/
 WINDEPLOYQT_BIN=$(find_windeployqt)
-"$WINDEPLOYQT_BIN" --release --dir deploy "$EXE_PATH"
+"$WINDEPLOYQT_BIN" --release --no-compiler-runtime --no-transitive-include-plugins --dir deploy "$EXE_PATH"
 
 if [ "$1" = "msys2" ]; then
     if command -v strip >/dev/null 2>&1; then
