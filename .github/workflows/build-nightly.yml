@@ -115,38 +115,24 @@ jobs:
   windows:
     runs-on: windows-latest
     name: "Citron nightly (windows)"
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        target: ["msvc", "msys2"]
-#    defaults:
-#        run:
-#          shell: ${{ (matrix.target == 'msys2' && 'msys2 {0}') || 'bash' }}
-#    env:
-#      OS: windows
-#      TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
         
       - name: Set up cache for vcpkg
- #       if: ${{ matrix.target == 'msvc' }}
         uses: actions/cache@v4
         with:
-          path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
+          path: C:/Users/runneradmin/AppData/Local/vcpkg/archives
           key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-vcpkg-
             
       - name: Set up MSVC
- #       if: ${{ matrix.target == 'msvc' }}
         uses: ilammy/msvc-dev-cmd@v1
        
       - name: Install extra tools (MSVC)
- #       if: ${{ matrix.target == 'msvc' }}
         run: choco install cmake sccache ninja wget zip -y
         
       - name: Install Qt (MSVC)
-  #      if: ${{ matrix.target == 'msvc' }}
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
@@ -156,24 +142,11 @@ jobs:
           cache: 'true'
         
       - name: Install vulkan-sdk (MSVC)
- #       if: ${{ matrix.target == 'msvc' }}
         run: |
            wget https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
            D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
            echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
            echo "PATH=C:/VulkanSDK/1.4.309.0/Bin:$PATH" >> $GITHUB_ENV
-          
- #     - name: Set up MSYS2
- #       if: ${{ matrix.target == 'msys2' }}
- #       uses: msys2/setup-msys2@v2
- #       with:
- #         msystem: MINGW64
- #         update: false
- #         install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
- #         pacboy: >-
- #           toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
- #           qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
- #           opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p python-pip:p
           
       - name: Disable line ending translation
         run: git config --global core.autocrlf input
@@ -181,7 +154,7 @@ jobs:
       - name: Compile Citron Windows
         run: |
           chmod +x ./citron-windows.sh
-          ./citron-windows.sh msvc
+          ./citron-windows.sh
           
       - name: Upload
         uses: actions/upload-artifact@v4
@@ -211,7 +184,7 @@ jobs:
         with:
           name: citron-common-appimage
           
-# disable andorid for now
+#      Disable andorid for now
 #      - uses: actions/download-artifact@v4.1.9
 #        with:
 #          name: citron-android-universal
@@ -219,11 +192,6 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: citron-windows-msvc
-          
-# disable msys2 for now         
-#      - uses: actions/download-artifact@v4.1.9
-#        with:
-#          name: windows-msys2          
           
       - uses: actions/download-artifact@v4.1.9
         with:
