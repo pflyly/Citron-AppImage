@@ -1,10 +1,7 @@
 #!/bin/bash -ex
 
 echo "Making Citron for Windows (MSVC)"
-if ! echo "$PATH" | grep -q "/c/ProgramData/chocolatey/bin"; then
-    export PATH="$PATH:/c/ProgramData/chocolatey/bin"
-fi
-echo "PATH is: $PATH"
+export PATH="$PATH:/c/ProgramData/chocolatey/bin"
 
 if ! git clone 'https://git.citron-emu.org/citron/emu.git' ./citron; then
 	echo "Using mirror instead..."
