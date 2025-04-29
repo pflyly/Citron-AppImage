@@ -1,33 +1,10 @@
 #!/bin/bash -ex
 
-find_windeployqt() {
-    if command -v windeployqt >/dev/null 2>&1; then
-        echo "windeployqt"
-        return
-    fi
-
-    QT_DIRS=(
-        "/c/Qt"
-        "C:/Qt"
-        "/usr/local/Qt"
-    )
-
-    for base in "${QT_DIRS[@]}"; do
-        if [ -d "$base" ]; then
-            # Find windeployqt.exe inside Qt folder
-            WINDEPLOYQT=$(find "$base" -name "windeployqt.exe" | head -n 1)
-            if [ -n "$WINDEPLOYQT" ]; then
-                echo "$WINDEPLOYQT"
-                return
-            fi
-        fi
-    done
-
-    echo "Error: windeployqt not found!" >&2
-    exit 1
-}
-
-git clone https://git.citron-emu.org/citron/emu.git ./citron
+if ! git clone 'https://git.citron-emu.org/citron/emu.git' ./citron; then
+	echo "Using mirror instead..."
+	rm -rf ./citron || true
+	git clone 'https://github.com/pflyly/citron-mirror.git' ./citron
+fi
 
 cd ./citron
 git submodule update --init --recursive
@@ -69,8 +46,8 @@ ninja
 EXE_PATH=./bin/citron.exe
 mkdir deploy
 cp -r bin/* deploy/
-WINDEPLOYQT_BIN=$(find_windeployqt)
-"$WINDEPLOYQT_BIN" --release --no-compiler-runtime --dir deploy "$EXE_PATH"
+windeployqt --release --no-compiler-runtime --no-opengl-sw --dir deploy "$EXE_PATH"
+rm deploy/Qt6*.pdb  # debug symbols aren't needed
 
 if [ "$1" = "msys2" ]; then
     if command -v strip >/dev/null 2>&1; then
