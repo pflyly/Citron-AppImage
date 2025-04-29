@@ -118,15 +118,17 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-      VCPKG_CACHE: ${{ env.LOCALAPPDATA }}\\vcpkg\\archives    
     steps:
       - uses: actions/checkout@v4
-
+      - name: Get vcpkg cache path
+        id: vcpkg-cache-path
+        run: echo "path=$LOCALAPPDATA\\vcpkg\\archives" >> $GITHUB_OUTPUT
+        shell: bash
+        
       - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
-          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          path: ${{ steps.vcpkg-cache-path.outputs.path }}
           key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-vcpkg-
