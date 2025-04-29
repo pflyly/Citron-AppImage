@@ -71,46 +71,46 @@ jobs:
           path: ~/hash
           overwrite: true
           
-  android: 
-    runs-on: ubuntu-latest
-    name: "Citron nightly (android)"
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
+#  android: 
+#    runs-on: ubuntu-latest
+#    name: "Citron nightly (android)"
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Install dependencies
+#        run: |
+#          sudo apt-get update -y
+#          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
           
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
+#     - name: Setup Java
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: 21
           
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-read-only: false
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v4
+#        with:
+#          cache-read-only: false
         
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+#      - name: Set up Android SDK
+#        uses: android-actions/setup-android@v2
         
-      - name: Accept Android SDK Licenses
-        run:  |
-          yes | sdkmanager --licenses
-          sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
+#      - name: Accept Android SDK Licenses
+#        run:  |
+#          yes | sdkmanager --licenses
+#          sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
 
-      - name: Compile Citron android
-        run: |
-          chmod +x ./citron-android.sh
-          ./citron-android.sh
+#      - name: Compile Citron android
+#        run: |
+#          chmod +x ./citron-android.sh
+#          ./citron-android.sh
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4.6.1
-        with:
-          name: citron-android-universal
-          path: citron/src/android/artifacts/
+#     - name: Upload artifact
+#       uses: actions/upload-artifact@v4.6.1
+#       with:
+#         name: citron-android-universal
+#         path: citron/src/android/artifacts/
           
   windows:
     runs-on: windows-latest
@@ -120,11 +120,15 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v4
+      - name: Get vcpkg cache path
+        id: vcpkg-cache-path
+        run: echo "path=$LOCALAPPDATA\\vcpkg\\archives" >> $GITHUB_OUTPUT
+        shell: bash
         
       - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
-          path: C:/Users/runneradmin/AppData/Local/vcpkg/archives
+          path: ${{ steps.vcpkg-cache-path.outputs.path }}
           key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-vcpkg-
@@ -133,7 +137,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
        
       - name: Install extra tools (MSVC)
-        run: choco install cmake ninja wget -y
+        run: choco install cmake 7zip wget -y --no-progress
         
       - name: Install Qt (MSVC)
         uses: jurplel/install-qt-action@v4
@@ -146,7 +150,7 @@ jobs:
         
       - name: Install vulkan-sdk (MSVC)
         run: |
-           wget https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
+           wget -q https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
            D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
            echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
            echo "PATH=C:/VulkanSDK/1.4.309.0/Bin:$PATH" >> $GITHUB_ENV          

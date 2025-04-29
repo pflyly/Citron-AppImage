@@ -10,18 +10,18 @@
 [![GitHub Downloads](https://img.shields.io/github/downloads/pflyly/Citron-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pflyly/Citron-AppImage/releases/latest)
 [![CI Build Status](https://github.com//pflyly/Citron-AppImage/actions/workflows/build-nightly.yml/badge.svg)](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
-This repository makes AppImage with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
-
 > [!IMPORTANT]
-> **Now added Windows release!!**
+> This repository now makes nightly release of citron for Linux, Android and Windows.
+>  
+> For Linux we make AppImage with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
 > 
-> **Android can't build for latest commit, use old version.**
+> Windows version is built via MSVC.
+> 
+> **Android can't build for latest commit, only [one version](https://github.com/pflyly/Citron-Nightly/releases/tag/2025-04-25-48eed78d1) is available for now.**
 
-* [Latest Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
+* [**Latest Nightly Release Here**](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
 ---------------------------------------------------------------
-
-In this fork, AppImage is made using original appimage-builder.sh of citron directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
 
 It is possible that this appimage may fail to work with appimagelauncher, I recommend these alternatives instead: 
 
