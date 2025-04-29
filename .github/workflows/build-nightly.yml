@@ -82,7 +82,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
           
-     - name: Setup Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -106,9 +106,9 @@ jobs:
           chmod +x ./citron-android.sh
           ./citron-android.sh
 
-     - name: Upload artifact
-       uses: actions/upload-artifact@v4.6.1
-       with:
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4.6.1
+        with:
          name: citron-android-universal
          path: citron/src/android/artifacts/
           
