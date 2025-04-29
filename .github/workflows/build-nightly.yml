@@ -124,9 +124,6 @@ jobs:
     env:
       OS: windows
       TARGET: ${{ matrix.target }}
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CCACHE_COMPILERCHECK: content
-      CCACHE_SLOPPINESS: time_macros
     steps:
       - uses: actions/checkout@v4
         
@@ -134,18 +131,13 @@ jobs:
         if: ${{ matrix.target == 'msvc' }}
         uses: actions/cache@v4
         with:
-          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
           key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
             
       - name: Set up cache for build
-        uses: actions/cache@v4
-        with:
-            path: ${{ env.CCACHE_DIR }}
-            key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.sha }}
-            restore-keys: |
-                ${{ runner.os }}-${{ matrix.target }}-ccache-
+        uses: mozilla-actions/sccache-action@v0.0.9
             
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
@@ -153,7 +145,7 @@ jobs:
        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
-        run: choco install cmake ccache ninja wget zip -y
+        run: choco install cmake sccache ninja wget zip -y
         
       - name: Install Qt (MSVC)
         if: ${{ matrix.target == 'msvc' }}
