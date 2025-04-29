@@ -59,20 +59,18 @@ mkdir build
 cd build
 cmake .. -G Ninja \
     -DCITRON_TESTS=OFF \
-    -DCITRON_USE_BUNDLED_QT=OFF \
     -DENABLE_QT_TRANSLATION=ON \
     -DUSE_DISCORD_PRESENCE=OFF \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+    -DCMAKE_C_COMPILER_LAUNCHER=sccache \
+    -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
-ccache -s -v
 
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/citron.exe
 mkdir deploy
-cp ./bin deploy/
+cp -r bin/* deploy/
 WINDEPLOYQT_BIN=$(find_windeployqt)
 "$WINDEPLOYQT_BIN" --release --no-compiler-runtime --dir deploy "$EXE_PATH"
 
