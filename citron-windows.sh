@@ -33,15 +33,19 @@ mkdir deploy
 cp -r bin/* deploy/
 windeployqt --release --no-compiler-runtime --no-opengl-sw --no-system-d3d-compiler --dir deploy "$EXE_PATH"
 
-# Delete un-needed debug symbols 
+# Delete un-needed debug files 
 find deploy -type f -name "*.pdb" -exec rm -f {} +
+# Delete DX components, users should have them already
+rm -f deploy/dxcompiler.dll
+rm -f deploy/dxil.dll
+
 
 # Pack for upload
 mkdir -p artifacts
 mkdir "$EXE_NAME"
 cp -r deploy/* "$EXE_NAME"
-ZIP_NAME="$EXE_NAME.zip"
-powershell Compress-Archive "$EXE_NAME" "$ZIP_NAME"
+ZIP_NAME="$EXE_NAME.7z"
+7z a -t7z -mx=9 "$ZIP_NAME" "$EXE_NAME"
 mv "$ZIP_NAME" artifacts/
 
 echo "Build completed successfully."
