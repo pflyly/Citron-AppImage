@@ -46,14 +46,17 @@ ninja
 EXE_PATH=./bin/citron.exe
 mkdir deploy
 cp -r bin/* deploy/
-windeployqt --release --no-compiler-runtime --no-opengl-sw --dir deploy "$EXE_PATH"
-rm deploy/Qt6*.pdb  # debug symbols aren't needed
+windeployqt --release --no-compiler-runtime --no-opengl-sw --no-system-d3d-compiler --dir deploy "$EXE_PATH"
 
-if [ "$1" = "msys2" ]; then
-    if command -v strip >/dev/null 2>&1; then
-            strip -s deploy/*.exe || true
-    fi        
-fi
+# Delete un-needed debug symbols 
+find deploy -type f -name "*.pdb" -exec rm -f {} +
+
+# Disable msys2 build for now
+#if [ "$1" = "msys2" ]; then
+#    if command -v strip >/dev/null 2>&1; then
+#            strip -s deploy/*.exe || true
+#    fi        
+#fi
 
 # Pack for upload
 mkdir -p artifacts
