@@ -47,7 +47,7 @@ UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARC
 if ! git clone 'https://git.citron-emu.org/citron/emu.git' ./citron; then
     echo "Using mirror instead..."
     rm -rf ./citron || true
-    git clone 'https://github.com/pkgforge-community/git.citron-emu.org-Citron-Citron.git' ./citron
+    git clone 'https://github.com/pflyly/citron-mirror.git' ./citron
 fi
 
 cd ./citron
