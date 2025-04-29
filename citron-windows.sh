@@ -72,7 +72,7 @@ ccache -s -v
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/citron.exe
 mkdir deploy
-cp -r ./bin deploy/
+cp ./bin deploy/
 WINDEPLOYQT_BIN=$(find_windeployqt)
 "$WINDEPLOYQT_BIN" --release --no-compiler-runtime --dir deploy "$EXE_PATH"
 
