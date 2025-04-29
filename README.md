@@ -1,8 +1,8 @@
 <h1 align="left">
   <br>
-  <a href="https://citron-emu.org"><img src="https://git.citron-emu.org/Citron/Citron/raw/branch/master/dist/citron.ico" width="200"></a>
+  <a href="https://citron-emu.org"><img src="https://git.citron-emu.org/citron/emu/-/raw/master/dist/citron.ico" width="200"></a>
   <br>
-  <b>Citron Optimized AppImage & APK</b>
+  <b>Citron Nightly Release</b>
   <br>
 </h1>
 
@@ -13,9 +13,11 @@
 This repository makes AppImage with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
 
 > [!IMPORTANT]
-> **Now added APK release!!**
+> **Now added Windows release!!**
+> 
+> **Android can't build for latest commit, use old version.**
 
-* [Latest Optimized Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
+* [Latest Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
 ---------------------------------------------------------------
 
