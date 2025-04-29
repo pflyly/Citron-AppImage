@@ -124,7 +124,7 @@ jobs:
       - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
-          path: C:/Users/runneradmin/AppData/Local/vcpkg/archives
+          path: ${{ env.LOCALAPPDATA }}\\vcpkg\\archives
           key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-vcpkg-
@@ -133,7 +133,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
        
       - name: Install extra tools (MSVC)
-        run: choco install cmake ninja wget -y
+        run: choco install cmake 7zip ninja wget -y
         
       - name: Install Qt (MSVC)
         uses: jurplel/install-qt-action@v4
