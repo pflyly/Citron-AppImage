@@ -15,7 +15,7 @@ jobs:
       matrix:
         target: [steamdeck, rog, common, check]
     container: ghcr.io/pkgforge-dev/archlinux:latest
-    name: "Citron nightly (${{ matrix.target }})"
+    name: "Citron nightly appimage (${{ matrix.target }})"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -109,43 +109,44 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4.6.1
         with:
-          name: android-universal
+          name: citron-android-universal
           path: citron/src/android/artifacts/
           
   windows:
     runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target: ["msvc", "msys2"]
-    defaults:
-        run:
-          shell: ${{ (matrix.target == 'msys2' && 'msys2 {0}') || 'bash' }}
-    env:
-      OS: windows
-      TARGET: ${{ matrix.target }}
+    name: "Citron nightly (windows)"
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        target: ["msvc", "msys2"]
+#    defaults:
+#        run:
+#          shell: ${{ (matrix.target == 'msys2' && 'msys2 {0}') || 'bash' }}
+#    env:
+#      OS: windows
+#      TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
         
       - name: Set up cache for vcpkg
-        if: ${{ matrix.target == 'msvc' }}
+ #       if: ${{ matrix.target == 'msvc' }}
         uses: actions/cache@v4
         with:
           path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
-          key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.target }}-vcpkg-
+            ${{ runner.os }}-vcpkg-
             
       - name: Set up MSVC
-        if: ${{ matrix.target == 'msvc' }}
+ #       if: ${{ matrix.target == 'msvc' }}
         uses: ilammy/msvc-dev-cmd@v1
        
       - name: Install extra tools (MSVC)
-        if: ${{ matrix.target == 'msvc' }}
+ #       if: ${{ matrix.target == 'msvc' }}
         run: choco install cmake sccache ninja wget zip -y
         
       - name: Install Qt (MSVC)
-        if: ${{ matrix.target == 'msvc' }}
+  #      if: ${{ matrix.target == 'msvc' }}
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.3'
@@ -155,51 +156,43 @@ jobs:
           cache: 'true'
         
       - name: Install vulkan-sdk (MSVC)
-        if: ${{ matrix.target == 'msvc' }}
+ #       if: ${{ matrix.target == 'msvc' }}
         run: |
            wget https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
            D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
            echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
            echo "PATH=C:/VulkanSDK/1.4.309.0/Bin:$PATH" >> $GITHUB_ENV
           
-      - name: Set up MSYS2
-        if: ${{ matrix.target == 'msys2' }}
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: false
-          install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
-          pacboy: >-
-            toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
-            qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
-            opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p python-pip:p
-            
-      - name: Fix automake and progtest.m4
-        if: ${{ matrix.target == 'msys2' }}
-        shell: msys2 {0}
-        run: |
-            pacman -Sy --noconfirm
-            pacman -S --noconfirm automake
-            ls /usr/share/aclocal/progtest.m4 || (echo "progtest.m4 still missing!" && exit 1)
+ #     - name: Set up MSYS2
+ #       if: ${{ matrix.target == 'msys2' }}
+ #       uses: msys2/setup-msys2@v2
+ #       with:
+ #         msystem: MINGW64
+ #         update: false
+ #         install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
+ #         pacboy: >-
+ #           toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
+ #           qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
+ #           opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p python-pip:p
           
       - name: Disable line ending translation
         run: git config --global core.autocrlf input
         
-      - name: Compile Citron ${{ matrix.target }}
+      - name: Compile Citron Windows
         run: |
           chmod +x ./citron-windows.sh
-          ./citron-windows.sh ${{ matrix.target }}
+          ./citron-windows.sh msvc
           
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.OS }}-${{ matrix.target }}
+          name: citron-windows-msvc
           path: citron/build/artifacts/
           
   release:
     name: "release"
     if: ${{ github.ref_name == 'main' }}
-    needs: [appimage, android, windows]
+    needs: [appimage, windows]
     permissions:
       actions: read
       security-events: write
@@ -217,16 +210,20 @@ jobs:
       - uses: actions/download-artifact@v4.1.9
         with:
           name: citron-common-appimage
+          
+# disable andorid for now
+#      - uses: actions/download-artifact@v4.1.9
+#        with:
+#          name: citron-android-universal
 
       - uses: actions/download-artifact@v4.1.9
         with:
-          name: android-universal
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: windows-msvc
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: windows-msys2          
+          name: citron-windows-msvc
+          
+# disable msys2 for now         
+#      - uses: actions/download-artifact@v4.1.9
+#        with:
+#          name: windows-msys2          
           
       - uses: actions/download-artifact@v4.1.9
         with:
@@ -256,4 +253,4 @@ jobs:
           generate_release_notes: false
           make_latest: true
           files: |
-            *.AppImage*, *.apk, *.zip
+            *.AppImage*, *.zip
