@@ -71,46 +71,46 @@ jobs:
           path: ~/hash
           overwrite: true
           
-  android: 
-    runs-on: ubuntu-latest
-    name: "Citron nightly (android)"
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
+#  android: 
+#    runs-on: ubuntu-latest
+#    name: "Citron nightly (android)"
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Install dependencies
+#        run: |
+#          sudo apt-get update -y
+#          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
           
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
+#     - name: Setup Java
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: 21
           
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-read-only: false
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v4
+#        with:
+#          cache-read-only: false
         
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+#      - name: Set up Android SDK
+#        uses: android-actions/setup-android@v2
         
-      - name: Accept Android SDK Licenses
-        run:  |
-          yes | sdkmanager --licenses
-          sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
+#      - name: Accept Android SDK Licenses
+#        run:  |
+#          yes | sdkmanager --licenses
+#          sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
 
-      - name: Compile Citron android
-        run: |
-          chmod +x ./citron-android.sh
-          ./citron-android.sh
+#      - name: Compile Citron android
+#        run: |
+#          chmod +x ./citron-android.sh
+#          ./citron-android.sh
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4.6.1
-        with:
-          name: citron-android-universal
-          path: citron/src/android/artifacts/
+#     - name: Upload artifact
+#       uses: actions/upload-artifact@v4.6.1
+#       with:
+#         name: citron-android-universal
+#         path: citron/src/android/artifacts/
           
   windows:
     runs-on: windows-latest
