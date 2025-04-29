@@ -136,9 +136,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
             
-      - name: Set up cache for build
-        uses: mozilla-actions/sccache-action@v0.0.9
-            
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
         uses: ilammy/msvc-dev-cmd@v1
