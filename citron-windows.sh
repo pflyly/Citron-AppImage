@@ -27,7 +27,7 @@ find_windeployqt() {
     exit 1
 }
 
-git clone 'https://git.citron-emu.org/Citron/Citron.git' ./citron
+git clone https://git.citron-emu.org/citron/emu.git ./citron
 
 cd ./citron
 git submodule update --init --recursive
