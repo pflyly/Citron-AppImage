@@ -1,6 +1,10 @@
 #!/bin/bash -ex
 
-git clone 'https://git.citron-emu.org/citron/emu.git' ./citron
+if ! git clone 'https://git.citron-emu.org/citron/emu.git' ./citron; then
+	echo "Using mirror instead..."
+	rm -rf ./citron || true
+	git clone 'https://github.com/pflyly/citron-mirror.git' ./citron
+fi
 
 cd ./citron
 git submodule update --init --recursive
