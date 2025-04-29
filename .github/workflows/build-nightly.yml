@@ -118,13 +118,15 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      VCPKG_CACHE: ${{ env.LOCALAPPDATA }}\\vcpkg\\archives    
     steps:
       - uses: actions/checkout@v4
         
       - name: Set up cache for vcpkg
         uses: actions/cache@v4
         with:
-          path: ${{ env.LOCALAPPDATA }}\\vcpkg\\archives
+          path: ${{ env.VCPKG_CACHE }}
           key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
           restore-keys: |
             ${{ runner.os }}-vcpkg-
