@@ -74,7 +74,7 @@ EXE_PATH=./bin/citron.exe
 mkdir deploy
 cp -r ./bin deploy/
 WINDEPLOYQT_BIN=$(find_windeployqt)
-"$WINDEPLOYQT_BIN" --release --no-compiler-runtime --no-transitive-include-plugins --dir deploy "$EXE_PATH"
+"$WINDEPLOYQT_BIN" --release --no-compiler-runtime --dir deploy "$EXE_PATH"
 
 if [ "$1" = "msys2" ]; then
     if command -v strip >/dev/null 2>&1; then
