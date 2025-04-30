@@ -14,10 +14,6 @@
 > This repository now makes nightly release of citron for Linux, Android and Windows.
 >  
 > For Linux we make AppImage with several flags of optimization especially for **Steamdeck** & **ROG ALLY X** & **Modern CPUs**(Common Build).
-> 
-> Windows version is built via MSVC.
-> 
-> **Android build via a workaround of reverting the vcpkg builtin-baseline and hardcoded cmake version.**
 
 * [**Latest Nightly Release Here**](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
