@@ -126,7 +126,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
-          key: ${{ runner.os }}-vcpkg
+          key: ${{ runner.os }}-vcpkg-cache
             
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
