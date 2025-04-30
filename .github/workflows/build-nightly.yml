@@ -169,7 +169,7 @@ jobs:
   release:
     name: "release"
     if: ${{ github.ref_name == 'main' }}
-    needs: [appimage, windows]
+    needs: [appimage, windows, android]
     permissions:
       actions: read
       security-events: write
@@ -188,10 +188,9 @@ jobs:
         with:
           name: citron-common-appimage
           
-#      Disable andorid for now
-#      - uses: actions/download-artifact@v4.1.9
-#        with:
-#          name: citron-android-universal
+      - uses: actions/download-artifact@v4.1.9
+        with:
+          name: citron-android-universal
 
       - uses: actions/download-artifact@v4.1.9
         with:
@@ -225,4 +224,4 @@ jobs:
           generate_release_notes: false
           make_latest: true
           files: |
-            *.AppImage*, *.zip
+            *.AppImage*, *.zip, *.apk
