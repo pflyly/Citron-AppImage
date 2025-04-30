@@ -17,7 +17,7 @@
 > 
 > Windows version is built via MSVC.
 > 
-> **Android can't build for latest commit, only [one version](https://github.com/pflyly/Citron-Nightly/releases/tag/2025-04-25-48eed78d1) is available for now.**
+> **Android build via a workaround of reverting the vcpkg builtin-baseline and hardcoded cmake version.**
 
 * [**Latest Nightly Release Here**](https://github.com/pflyly/Citron-AppImage/releases/latest)
 
