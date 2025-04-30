@@ -120,18 +120,13 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v4
-      - name: Get vcpkg cache path
-        id: vcpkg-cache-path
-        run: echo "path=$LOCALAPPDATA\\vcpkg\\archives" >> $GITHUB_OUTPUT
-        shell: bash
-        
-      - name: Set up cache for vcpkg
-        uses: actions/cache@v4
+ 
+      - name: Restore cache for vcpkg
+        id: cache-restore
+        uses: actions/cache/restore@v4
         with:
-          path: ${{ steps.vcpkg-cache-path.outputs.path }}
-          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
-          restore-keys: |
-            ${{ runner.os }}-vcpkg-
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          key: ${{ runner.os }}-vcpkg-cache
             
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -165,6 +160,13 @@ jobs:
         with:
           name: citron-windows-msvc
           path: citron/build/artifacts/
+          
+      - name: Save cache for vcpkg
+        id: cache-save
+        uses: actions/cache/save@v4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
           
   release:
     name: "release"
