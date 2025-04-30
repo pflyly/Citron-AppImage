@@ -10,9 +10,7 @@ cd ./citron
 git submodule update --init --recursive
 
 # workaround for android
-sed -i 's/"boost-process"[[:space:]]*,*/{"name": "boost-process", "platform": "!android"},/' vcpkg.json
-sed -i '/#include <boost\/process\/async_pipe.hpp>/i #if !defined(__ANDROID__)' src/core/debugger/debugger.cpp
-sed -i '/#include <boost\/process\/async_pipe.hpp>/a #endif' src/core/debugger/debugger.cpp
+cp ../vcpkg.json ./
 find src -type f -name 'build.gradle.kts' -exec sed -i 's/"4\.0\.1"/"3.31.6"/g' {} +
 
 COUNT="$(git rev-list --count HEAD)"
