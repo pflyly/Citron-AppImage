@@ -10,7 +10,6 @@ cd ./citron
 git submodule update --init --recursive
 
 # workaround for android
-cp ../vcpkg.json ./
 find src -type f -name 'build.gradle.kts' -exec sed -i 's/"4\.0\.1"/"3.31.6"/g' {} +
 
 COUNT="$(git rev-list --count HEAD)"
