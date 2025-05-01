@@ -36,8 +36,8 @@ case "$1" in
     check)
         echo "Checking build"
         CITRON_USE_PRECOMPILED_HEADERS=OFF
-	CMAKE_CXX_FLAGS="-Wno-error"
-        CMAKE_C_FLAGS="-Wno-error"
+	CMAKE_CXX_FLAGS="-w"
+        CMAKE_C_FLAGS="-w"
         TARGET="Check"
         CCACHE="ccache"
         ;;
