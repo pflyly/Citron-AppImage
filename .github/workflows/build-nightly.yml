@@ -18,12 +18,12 @@ jobs:
     container: ghcr.io/pkgforge-dev/archlinux:latest
     name: "Citron nightly appimage (${{ matrix.target }})"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         with:
           persist-credentials: false
           
       - name: Set up cache for vcpkg
-        uses: actions/cache@v4
+        uses: actions/cache@v4.2.3
         with:
           path: /github/home/.cache/vcpkg/archives
           key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
@@ -32,7 +32,7 @@ jobs:
 
       - name: Set up ccache for check
         if: ${{ matrix.target == 'check' }}
-        uses: actions/cache@v4
+        uses: actions/cache@v4.2.3
         with:
           path: /github/home/.ccache
           key: ${{ runner.os }}-ccache-check-${{ github.sha }}
@@ -54,7 +54,8 @@ jobs:
           mv *.AppImage* dist/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4.6.1
+        if: ${{ matrix.target != 'check' }}
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: citron-${{ matrix.target}}-appimage
           path: "dist"
@@ -66,7 +67,7 @@ jobs:
 
       - name: Upload hash file
         if: ${{ matrix.target == 'steamdeck' }}
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: hash
           path: ~/hash
@@ -76,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Citron nightly (android)"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
       - name: Install dependencies
         run: |
@@ -108,7 +109,7 @@ jobs:
           ./citron-android.sh
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@v4.6.2
         with:
          name: citron-android-universal
          path: citron/src/android/artifacts/
@@ -120,13 +121,13 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
  
       - name: Restore cache for vcpkg
         id: cache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v4.2.3
         with:
-          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
           key: ${{ runner.os }}-vcpkg-cache
             
       - name: Set up MSVC
@@ -157,16 +158,16 @@ jobs:
           ./citron-windows.sh
           
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: citron-windows-msvc
           path: citron/build/artifacts/
           
       - name: Save cache for vcpkg
         id: cache-save
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v4.2.3
         with:
-          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
           key: ${{ steps.cache-restore.outputs.cache-primary-key }}
           
   release:
@@ -179,29 +180,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: citron-steamdeck-appimage
-
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: citron-rog-appimage
-
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: citron-common-appimage
-          
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: citron-android-universal
-
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: citron-windows-msvc
-          
-      - uses: actions/download-artifact@v4.1.9
-        with:
-          name: hash
+      - uses: actions/download-artifact@v4.3.0
           
       - name: Read hash and Get date
         run: |
