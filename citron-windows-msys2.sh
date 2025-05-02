@@ -15,12 +15,15 @@ git submodule update --init --recursive
 COUNT="$(git rev-list --count HEAD)"
 HASH="$(git rev-parse --short HEAD)"
 DATE="$(date +"%Y%m%d")"
-EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-Windows-MSVC"
+EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-Windows-MSYS2"
 
 mkdir build
 cd build
 cmake .. -G Ninja \
     -DCITRON_TESTS=OFF \
+    -DCITRON_USE_BUNDLED_QT=OFF \
+    -DUSE_SYSTEM_QT=ON \
+    -DENABLE_LIBUSB=OFF \
     -DENABLE_QT_TRANSLATION=ON \
     -DCITRON_ENABLE_LTO=ON \
     -DUSE_DISCORD_PRESENCE=OFF \
