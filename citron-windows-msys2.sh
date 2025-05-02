@@ -28,9 +28,8 @@ cmake .. -G Ninja \
     -DCITRON_ENABLE_LTO=ON \
     -DUSE_DISCORD_PRESENCE=OFF \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-    -DCMAKE_CXX_FLAGS="-w" \
-    -DCMAKE_C_FLAGS="-w"
+    -DCMAKE_CXX_FLAGS="-Wno-error -w" \
+    -DCMAKE_C_FLAGS="-Wno-error -w"
 ninja
 
 # Use windeployqt to gather dependencies
