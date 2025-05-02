@@ -161,7 +161,7 @@ jobs:
     name: "Citron nightly (windows-msys2)"
     defaults:
       run:
-        shell: msys2
+        shell: msys2 {0}
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Set up MSYS2
