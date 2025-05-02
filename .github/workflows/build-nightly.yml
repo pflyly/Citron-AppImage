@@ -167,7 +167,7 @@ jobs:
       - name: Set up MSYS2
         uses: msys2/setup-msys2@v2.27.0
         with:
-           msystem: MINGW64
+           msystem: clang64
            update: false
            install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
            pacboy: >-
