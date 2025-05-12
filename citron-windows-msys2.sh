@@ -17,6 +17,8 @@ HASH="$(git rev-parse --short HEAD)"
 DATE="$(date +"%Y%m%d")"
 EXE_NAME="Citron-nightly-${DATE}-${COUNT}-${HASH}-Windows-MSYS2"
 
+sed -i '/std::optional<Network::IPv4Address> GetHostIPv4Address()/,/^}/ s/\binterface\b/netInterface/g' ./src/core/internal_network/network.cpp
+
 mkdir build
 cd build
 cmake .. -G Ninja \
