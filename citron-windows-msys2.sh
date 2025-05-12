@@ -23,9 +23,7 @@ mkdir build
 cd build
 cmake .. -G Ninja \
     -DCITRON_TESTS=OFF \
-    -DCITRON_USE_BUNDLED_QT=OFF \
     -DENABLE_WEB_SERVICE=OFF \
-    -DUSE_SYSTEM_QT=ON \
     -DCITRON_USE_BUNDLED_FFMPEG=OFF \
     -DENABLE_LIBUSB=OFF \
     -DENABLE_QT_TRANSLATION=ON \
@@ -37,12 +35,13 @@ ninja
 
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/citron.exe
+strip -s bin/*.exe
 mkdir deploy
 cp -r bin/* deploy/
 windeployqt --release --no-compiler-runtime --no-opengl-sw --no-system-d3d-compiler --dir deploy "$EXE_PATH"
 
 # Delete un-needed debug files 
-find deploy -type f -name "*.pdb" -exec rm -f {} +
+# find deploy -type f -name "*.pdb" -exec rm -f {} +
 # Delete DX components, users should have them already
 rm -f deploy/dxcompiler.dll
 rm -f deploy/dxil.dll
