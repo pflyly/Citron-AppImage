@@ -11,6 +11,7 @@ git submodule update --init --recursive
 
 # workaround for android
 find src -type f -name 'build.gradle.kts' -exec sed -i 's/"4\.0\.1"/"3.31.6"/g' {} +
+sed -i '/sse2neon/d' ./src/video_core/CMakeLists.txt
 
 COUNT="$(git rev-list --count HEAD)"
 HASH="$(git rev-parse --short HEAD)"
