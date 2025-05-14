@@ -24,21 +24,30 @@ cmake .. -G Ninja \
     -DENABLE_QT_TRANSLATION=ON \
     -DCITRON_ENABLE_LTO=ON \
     -DUSE_DISCORD_PRESENCE=OFF \
+    -DENABLE_WEB_SERVICE=OFF \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
+
+# Find windeployqt.exe from external Qt installation path
+WINDEPLOYQT_EXE=$(find ./externals/qt -type f -name windeployqt.exe | head -n 1)
+if [ -z "$WINDEPLOYQT_EXE" ]; then
+    echo "Error: windeployqt.exe not found"
+    exit 1
+fi
+echo "Found windeployqt at: $WINDEPLOYQT_EXE"
 
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/citron.exe
 mkdir deploy
 cp -r bin/* deploy/
-windeployqt --release --no-compiler-runtime --no-opengl-sw --no-system-d3d-compiler --dir deploy "$EXE_PATH"
+"$WINDEPLOYQT_EXE" --release --no-compiler-runtime --no-opengl-sw --no-system-d3d-compiler --dir deploy "$EXE_PATH"
 
 # Delete un-needed debug files 
-find deploy -type f -name "*.pdb" -exec rm -f {} +
+find deploy -type f -name "*.pdb" -exec rm -fv {} +
 # Delete DX components, users should have them already
-rm -f deploy/dxcompiler.dll
-rm -f deploy/dxil.dll
+rm -fv deploy/dxcompiler.dll
+rm -fv deploy/dxil.dll
 
 
 # Pack for upload
