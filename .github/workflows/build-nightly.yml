@@ -122,7 +122,7 @@ jobs:
         id: cache-restore
         uses: actions/cache/restore@v4.2.3
         with:
-          path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
+          path: 'C:/Users/runneradmin/AppData/Local/vcpkg/archives'
           key: ${{ runner.os }}-vcpkg-cache
             
       - name: Set up MSVC
@@ -153,7 +153,7 @@ jobs:
         id: cache-save
         uses: actions/cache/save@v4.2.3
         with:
-          path: 'C:\Users\runneradmin\AppData\Local\vcpkg\archives'
+          path: 'C:/Users/runneradmin/AppData/Local/vcpkg/archives'
           key: ${{ steps.cache-restore.outputs.cache-primary-key }}
           
   release:
