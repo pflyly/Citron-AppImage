@@ -63,10 +63,10 @@ jobs:
       - name: Check hash file
         run: |
           cat ~/hash
-          echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
+          echo "APP_VERSION=$(cat ~/hash)" >> "${GITHUB_ENV}"
 
       - name: Upload hash file
-        if: ${{ matrix.target == 'steamdeck' }}
+        if: ${{ matrix.target == 'check' }}
         uses: actions/upload-artifact@v4.6.2
         with:
           name: hash
@@ -82,7 +82,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
+          sudo apt-get install glslang-tools libvulkan-dev -y
           
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -97,11 +97,6 @@ jobs:
         
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
-        
-      - name: Accept Android SDK Licenses
-        run:  |
-          yes | sdkmanager --licenses
-          sdkmanager "ndk;29.0.13113456" "cmake;3.31.6"
 
       - name: Compile Citron android
         run: |
@@ -135,16 +130,7 @@ jobs:
        
       - name: Install extra tools (MSVC)
         run: choco install cmake 7zip wget -y --no-progress
-        
-      - name: Install Qt (MSVC)
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: '6.8.3'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_msvc2022_64'
-          cache: 'true'
-        
+   
       - name: Install vulkan-sdk (MSVC)
         run: |
            wget -q https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
